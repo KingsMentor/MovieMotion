@@ -1,6 +1,6 @@
 package xyz.belvi.motion.models.retroResponse
 
-import xyz.belvi.motion.data.Movie
+import xyz.belvi.motion.data.realmObject.Movie
 
 /**
  * Created by zone2 on 6/23/18.

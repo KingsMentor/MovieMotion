@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Motion</string>
+    <string name="postal_transition_name">postal_transition_name</string>
+    <string name="motion">Motion</string>
+
+    <string name="filter_popular">Popular</string>
+    <string name="filter_top_rated">Top Rated</string>
+    <string name="filter_fav">Favorite</string>
+    <string name="loading">loading</string>
+
+    <string name="retry">Retry</string>
+    <string name="data_load_failed">failed to load data</string>
+    <string name="filter">Filter</string>
 </resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="activity_main" type="id" />
+    <item name="movie_img" type="id" />
+    <item name="pre_loader" type="id" />
+
+
+    <item name="app_bar" type="id" />
+    <item name="toolbar" type="id" />
+    <item name="toolbar_layout" type="id" />
+    <item name="drawer_layout" type="id" />
+    <item name="movies" type="id" />
+    <item name="failed_view" type="id" />
+    <item name="nav_view" type="id" />
+    <item name="action_filter" type="id" />
+    <item name="action_fav" type="id" />
+    <item name="action_review" type="id" />
+    <item name="action_filter_favorite" type="id" />
+    <item name="action_filter_popular" type="id" />
+    <item name="action_filter_top_rated" type="id" />
+    <item name="loading_items" type="id" />
+    <item name="img_postal" type="id" />
+    <item name="contentItems" type="id" />
+    <item name="linearLayoutCompat" type="id" />
+    <item name="trailers_and_reviews" type="id" />
+    <item name="ftv" type="id" />
+    <item name="thumbnail" type="id" />
+    <item name="rating" type="id" />
+    <item name="rating_txt" type="id" />
+    <item name="release_date" type="id" />
+    <item name="title" type="id" />
+    <item name="retry" type="id" />
+    <item name="loading_view_indicator" type="id" />
+    <item name="author" type="id" />
+    <item name="content" type="id" />
+    <item name="reviews" type="id" />
+    <item name="item_loading_view" type="id" />
+    <item name="pb_load_indicator" type="id" />
+    <item name="empty_review_indicator" type="id" />
+    <item name="retry_view" type="id" />
+    <item name="trailer_txt_view" type="id" />
+    <item name="trailers" type="id" />
+    <item name="trailer_loading_indicator" type="id" />
+    <item name="toolbar_title_view" type="id" />
+</resources>

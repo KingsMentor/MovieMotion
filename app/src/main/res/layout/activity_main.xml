@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    tools:context=".main.MainActivity">
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/activity_main_toolbar" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <xyz.belvi.motion.enchanceViews.EnhanceGridRecyclerView
+                        android:id="@id/movies"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:clipToPadding="false" />
+
+
+                    <include
+                        layout="@layout/loading_view"
+                        android:visibility="gone" />
+
+                </android.support.v7.widget.LinearLayoutCompat>
+
+                <include
+                    android:id="@id/failed_view"
+                    layout="@layout/failed_to_load"
+                    android:visibility="gone" />
+
+                <ProgressBar
+                    android:id="@id/loading_items"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+            </FrameLayout>
+
+
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <android.support.design.widget.NavigationView
+            android:id="@id/nav_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            app:itemTextColor="@color/nav_drawer_bg"
+            app:menu="@menu/activity_main_menu_side_nav" />
+    </android.support.v4.widget.DrawerLayout>
+
+</LinearLayout>

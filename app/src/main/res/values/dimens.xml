@@ -1,0 +1,46 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="app_bar_height">260dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="grey_bg_radius">2dp</dimen>
+    <dimen name="trailer_border_stroke_width">1dp</dimen>
+    <dimen name="trailer_border_corner_radius">8dp</dimen>
+    <dimen name="review_frag_padding_bottom">8dp</dimen>
+    <dimen name="trailers_txt_size">18sp</dimen>
+    <dimen name="trailers_header_left_margin">16dp</dimen>
+    <dimen name="underline_height">1dp</dimen>
+    <dimen name="underline_martin_top">4dp</dimen>
+    <dimen name="rating_txt_size">24sp</dimen>
+    <dimen name="release_date_txt_size">14sp</dimen>
+    <dimen name="movie_title_txt_size">32sp</dimen>
+    <dimen name="backdrop_img_height">142dp</dimen>
+    <dimen name="backdrop_img_width">100dp</dimen>
+    <dimen name="backdrop_img_right_margin">8dp</dimen>
+    <dimen name="rating_bar_padding">4dp</dimen>
+    <dimen name="rating_txt_padding_right">8dp</dimen>
+    <dimen name="release_date_padding">4dp</dimen>
+    <dimen name="retry_details_txt_zise">18sp</dimen>
+    <dimen name="loading_ic_pb_dimen">10dp</dimen>
+    <dimen name="loading_txt_size">12sp</dimen>
+    <dimen name="loading_txt_margin">16dp</dimen>
+    <dimen name="loading_view_padding">8dp</dimen>
+    <dimen name="motion_img_height">280dp</dimen>
+    <dimen name="motion_img_loading_pb_width">40dp</dimen>
+    <dimen name="motion_img_loading_pb_height">3dp</dimen>
+    <dimen name="content_txt_size">16sp</dimen>
+    <dimen name="content_padding">8sp</dimen>
+    <dimen name="content_margin">16sp</dimen>
+    <dimen name="author_txt_size">18sp</dimen>
+    <dimen name="empty_text_size">16sp</dimen>
+    <dimen name="empty_view_padding">16dp</dimen>
+    <dimen name="trailer_item_txt_size">12sp</dimen>
+    <dimen name="trailer_padding">8dp</dimen>
+    <dimen name="trailer_pb_dimen">30dp</dimen>
+    <dimen name="trailer_margin">16dp</dimen>
+    <dimen name="toolbar_title_size">18sp</dimen>
+    <dimen name="toolbar_ic_dimen">32dp</dimen>
+    <dimen name="toolbar_padding">8dp</dimen>
+</resources>
