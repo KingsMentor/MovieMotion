@@ -43,11 +43,12 @@ class MoviesVM : ViewModel() {
             this.presenter.onLoadStarted(false)
             fetchMoviesFromApi<PopularMovieResponse, PopularMovie>(filter)
         } else if (filter == MovieFilter.TOP_RATED) {
-            fetchMoviesFromApi<PopularMovieResponse, PopularMovie>(filter)
+            fetchMoviesFromApi<TopRatedMovieResponse, TopRatedMovie>(filter)
         }
     }
 
     fun switchFilter(movieFilter: MovieFilter) {
+        this.presenter.clearAdapter()
         loadMoviesByFilter(movieFilter)
     }
 
@@ -61,11 +62,12 @@ class MoviesVM : ViewModel() {
             MovieFilter.TOP_RATED -> {
                 this.presenter.onLoadStarted(isMovieListEmpty<TopRatedMovie>())
                 switchRealmObserver<TopRatedMovie>()
-                fetchMoviesFromApi<PopularMovieResponse, PopularMovie>(filter)
+                fetchMoviesFromApi<TopRatedMovieResponse, TopRatedMovie>(filter)
             }
             else -> {
                 this.presenter.onLoadStarted(isMovieListEmpty<FavMovie>())
                 switchRealmObserver<FavMovie>()
+                this.presenter.onLoadCompleted(isMovieListEmpty<FavMovie>())
 
             }
         }
@@ -86,7 +88,7 @@ class MoviesVM : ViewModel() {
 
     private inline fun <reified T, reified D : RealmModel> fetchMoviesFromApi(filter: MovieFilter) {
         apiKey()?.let { apiKey ->
-            apiClient.create(ApiInterface::class.java).fetchMovies(filter.sortType, apiKey, page)
+            apiClient.create(ApiInterface::class.java).fetchMovies(filter.path, apiKey, page)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnError {
@@ -99,11 +101,12 @@ class MoviesVM : ViewModel() {
                             if (page == 0)
                                 clearMovies<D>()
                             filter.updatePageCounter()
-                            if (filter == MovieFilter.TOP_RATED)
+                            (it as? TopRatedMovieResponse)?.let {
+                                updateMovies(it.results)
+                            } ?: kotlin.run {
                                 updateMovies((it as PopularMovieResponse).results)
-                            else
-                                updateMovies((it as TopRatedMovieResponse).results)
-                            this.presenter.onLoadCompleted()
+                            }
+                            this.presenter.onLoadCompleted(isMovieListEmpty<D>())
                         }
                     }
         }

@@ -10,6 +10,7 @@ import xyz.belvi.motion.data.realmObject.PopularMovie
 interface MoviesFetchPresenter {
     fun onLoadFailure(emptyDataSet: Boolean)
     fun onLoadStarted(freshLoad: Boolean)
-    fun onLoadCompleted()
+    fun onLoadCompleted(isEmpty: Boolean)
+    fun clearAdapter()
     fun movieSelected(view: View, movie: Movie, postion: Int)
 }

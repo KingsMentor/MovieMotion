@@ -10,5 +10,7 @@
 
     <string name="retry">Retry</string>
     <string name="data_load_failed">failed to load data</string>
+    <string name="data_load_empty">This dataset is empty</string>
     <string name="filter">Filter</string>
+    <string name="title_txt">Motion - %s</string>
 </resources>

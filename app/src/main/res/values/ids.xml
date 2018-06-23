@@ -11,6 +11,7 @@
     <item name="drawer_layout" type="id" />
     <item name="movies" type="id" />
     <item name="failed_view" type="id" />
+    <item name="empty_view" type="id" />
     <item name="nav_view" type="id" />
     <item name="action_filter" type="id" />
     <item name="action_fav" type="id" />

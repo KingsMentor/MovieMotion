@@ -8,9 +8,13 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.GridLayoutManager
 import android.view.Gravity
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_toolbar.*
+import kotlinx.android.synthetic.main.failed_to_load.*
 import kotlinx.android.synthetic.main.loading_view.*
 import xyz.belvi.motion.R
 import xyz.belvi.motion.data.realmObject.Movie
@@ -47,10 +51,13 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
                 item.isChecked = true
                 setFilterType(movieFilter)
                 moviesVM.switchFilter(movieFilter)
+                toolbar_title_view.text = String.format(getString(R.string.title_txt), movieFilter.friendlyName)
             }
             drawer_layout.closeDrawer(Gravity.END)
             true
         })
+        nav_view.menu.findItem(getFilterType().id).isCheckable = true
+        toolbar_title_view.text = String.format(getString(R.string.title_txt), getFilterType().friendlyName)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +80,21 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
             }
         }
 
+        RxView.clicks(retry).subscribe {
+            moviesVM.switchFilter(getFilterType())
+        }
 
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.activity_main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        drawer_layout.openDrawer(Gravity.END)
+        return super.onOptionsItemSelected(item)
     }
 
 
@@ -81,9 +102,11 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
         moviesVM.requestNextPage(getFilterType())
     }
 
-    override fun onLoadCompleted() {
+    override fun onLoadCompleted(isEmpty: Boolean) {
         loading_view_indicator.visibility = View.GONE
         loading_items.visibility = View.GONE
+        if (isEmpty)
+            empty_view.visibility = View.VISIBLE
 
     }
 
@@ -94,8 +117,13 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
         }
     }
 
+    override fun clearAdapter() {
+        (movies.adapter as MovieListAdapter).updateItems(arrayListOf())
+    }
+
     override fun onLoadStarted(freshLoad: Boolean) {
         failed_view.visibility = View.GONE
+        empty_view.visibility = View.GONE
         loading_view_indicator.visibility = if (freshLoad) View.GONE else View.VISIBLE
         loading_items.visibility = if (freshLoad) View.VISIBLE else View.GONE
     }

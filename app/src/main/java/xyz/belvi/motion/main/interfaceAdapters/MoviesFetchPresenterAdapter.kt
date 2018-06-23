@@ -13,7 +13,7 @@ abstract class MoviesFetchPresenterAdapter : MoviesFetchPresenter {
 
     }
 
-    override fun onLoadCompleted() {
+    override fun onLoadCompleted(isEmpty: Boolean) {
 
     }
 
