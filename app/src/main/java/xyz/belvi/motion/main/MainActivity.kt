@@ -1,30 +1,33 @@
 package xyz.belvi.motion.main
 
+import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.Toolbar
 import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_toolbar.*
+import kotlinx.android.synthetic.main.loading_view.*
 import xyz.belvi.motion.R
 import xyz.belvi.motion.data.realmObject.Movie
 import xyz.belvi.motion.enchanceViews.EnhanceGridRecyclerView
 import xyz.belvi.motion.enchanceViews.GridSpacingItemDecoration
+import xyz.belvi.motion.main.adapter.MovieListAdapter
 import xyz.belvi.motion.main.interfaceAdapters.MoviesFetchPresenter
+import xyz.belvi.motion.main.viewModel.MoviesVM
+import xyz.belvi.motion.models.enums.findByResID
+import xyz.belvi.motion.preferences.getFilterType
+import xyz.belvi.motion.preferences.setFilterType
 
 class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll, MoviesFetchPresenter {
 
 
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
+    private lateinit var moviesVM: MoviesVM
 
     private fun initSideNav() {
         setSupportActionBar(toolbar)
@@ -39,7 +42,12 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
 
         drawer_layout.addDrawerListener(actionBarDrawerToggle)
         nav_view.setNavigationItemSelectedListener(NavigationView.OnNavigationItemSelectedListener { item ->
-            item.isChecked = true
+            val movieFilter = findByResID(item.itemId)
+            if (movieFilter != getFilterType()) {
+                item.isChecked = true
+                setFilterType(movieFilter)
+                moviesVM.switchFilter(movieFilter)
+            }
             drawer_layout.closeDrawer(Gravity.END)
             true
         })
@@ -55,31 +63,41 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
             layoutManager = GridLayoutManager(this@MainActivity, 2)
             addItemDecoration(GridSpacingItemDecoration(2, 0, false))
             setHasFixedSize(false)
+            adapter = MovieListAdapter(arrayListOf(), this@MainActivity)
         }
+        moviesVM = ViewModelProviders.of(this).get(MoviesVM::class.java)
+
+        moviesVM.bindWithModel(this@MainActivity, getFilterType()).observeForever {
+            it?.let {
+                (movies.adapter as MovieListAdapter).updateItems(it)
+            }
+        }
+
+
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.activity_main_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        drawer_layout.openDrawer(Gravity.END)
-        return super.onOptionsItemSelected(item)
-    }
 
     override fun reachedEndOfList() {
-
+        moviesVM.requestNextPage(getFilterType())
     }
 
     override fun onLoadCompleted() {
+        loading_view_indicator.visibility = View.GONE
+        loading_items.visibility = View.GONE
 
     }
 
-    override fun onLoadFailure() {
+    override fun onLoadFailure(emptyDataSet: Boolean) {
+        if (emptyDataSet) {
+            failed_view.visibility = View.VISIBLE
+            loading_items.visibility = View.GONE
+        }
     }
 
-    override fun onLoadStarted(refresh: Boolean) {
+    override fun onLoadStarted(freshLoad: Boolean) {
+        failed_view.visibility = View.GONE
+        loading_view_indicator.visibility = if (freshLoad) View.GONE else View.VISIBLE
+        loading_items.visibility = if (freshLoad) View.VISIBLE else View.GONE
     }
 
     override fun movieSelected(view: View, movie: Movie, postion: Int) {

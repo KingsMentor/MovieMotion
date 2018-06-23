@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="xyz.belvi.motion">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".app.MotionApp"
         android:allowBackup="true"
@@ -10,10 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data
-            android:name="movie_db_api_key"
-            android:value="@string/movie_db_api_key" />
-
         <activity
             android:name=".main.MainActivity"
             android:screenOrientation="portrait">

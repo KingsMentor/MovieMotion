@@ -9,10 +9,11 @@
         android:id="@id/pre_loader"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="1dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         app:lottie_autoPlay="true"
-        app:lottie_fileName="lottie/helfie_loader.json"
+        app:lottie_fileName="lottie/image_preloader.json"
         app:lottie_loop="true" />
 
 
