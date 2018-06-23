@@ -13,4 +13,17 @@
     <string name="data_load_empty">This dataset is empty</string>
     <string name="filter">Filter</string>
     <string name="title_txt">Motion - %s</string>
+
+    <string name="trailers">Trailers</string>
+
+    <string name="review_author">Review By</string>
+    <string name="review_content">Author\'s Review</string>
+    <string name="ratings">Ratings Star</string>
+
+    <string name="back_drp_img">Back Drop image of movie postal</string>
+    <string name="ratings_txt">Ratings Value</string>
+    <string name="trailer_header">Trailers</string>
+    <string name="movie_description">Movie Description</string>
+    <string name="trailer_content_description">Trailer from %s</string>
+
 </resources>

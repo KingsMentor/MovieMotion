@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="star_number" type="integer">5</item>
+    <item name="rating" type="integer">2.5</item>
+    <item name="step_size" type="integer">0.5</item>
+</resources>

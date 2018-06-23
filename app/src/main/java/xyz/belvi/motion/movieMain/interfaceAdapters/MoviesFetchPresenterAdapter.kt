@@ -1,8 +1,7 @@
-package xyz.belvi.motion.main.interfaceAdapters
+package xyz.belvi.motion.movieMain.interfaceAdapters
 
 import android.view.View
 import xyz.belvi.motion.data.realmObject.Movie
-import xyz.belvi.motion.data.realmObject.PopularMovie
 
 /**
  * Created by zone2 on 6/23/18.

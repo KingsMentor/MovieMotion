@@ -25,6 +25,10 @@ open class PopularMovie(
         var release_date: String = ""
 
 ) : RealmObject(), Movie {
+
+    override fun getMovieId(): Int {
+        return id
+    }
     override fun getMovieTitle(): String {
         return title
     }

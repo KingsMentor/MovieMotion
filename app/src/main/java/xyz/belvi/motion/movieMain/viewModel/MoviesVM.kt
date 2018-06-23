@@ -1,4 +1,4 @@
-package xyz.belvi.motion.main.viewModel
+package xyz.belvi.motion.movieMain.viewModel
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -13,7 +13,7 @@ import xyz.belvi.motion.data.realmObject.FavMovie
 import xyz.belvi.motion.data.realmObject.Movie
 import xyz.belvi.motion.data.realmObject.PopularMovie
 import xyz.belvi.motion.data.realmObject.TopRatedMovie
-import xyz.belvi.motion.main.interfaceAdapters.MoviesFetchPresenter
+import xyz.belvi.motion.movieMain.interfaceAdapters.MoviesFetchPresenter
 import xyz.belvi.motion.models.enums.MovieFilter
 import xyz.belvi.motion.models.retroResponse.PopularMovieResponse
 import xyz.belvi.motion.models.retroResponse.TopRatedMovieResponse
@@ -25,7 +25,6 @@ import xyz.belvi.motion.network.client.ApiClient.Companion.apiClient
  */
 class MoviesVM : ViewModel() {
 
-    private var page = 1
     private var liveMovies: MutableLiveData<MutableList<Movie>> = MutableLiveData()
     private lateinit var presenter: MoviesFetchPresenter
     val rxDisposal = CompositeDisposable()
@@ -39,6 +38,7 @@ class MoviesVM : ViewModel() {
     }
 
     fun requestNextPage(filter: MovieFilter) {
+        filter.updatePageCounter()
         if (filter == MovieFilter.POPULAR) {
             this.presenter.onLoadStarted(false)
             fetchMoviesFromApi<PopularMovieResponse, PopularMovie>(filter)
@@ -88,7 +88,7 @@ class MoviesVM : ViewModel() {
 
     private inline fun <reified T, reified D : RealmModel> fetchMoviesFromApi(filter: MovieFilter) {
         apiKey()?.let { apiKey ->
-            apiClient.create(ApiInterface::class.java).fetchMovies(filter.path, apiKey, page)
+            apiClient.create(ApiInterface::class.java).fetchMovies(filter.path, apiKey, filter.currentPage())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnError {
@@ -98,11 +98,10 @@ class MoviesVM : ViewModel() {
                     .map { Gson().fromJson(it.asJsonObject.toString(), T::class.java) }
                     .subscribe {
                         it?.let {
-                            if (page == 0)
+                            if (filter.currentPage() == 1)
                                 clearMovies<D>()
-                            filter.updatePageCounter()
                             (it as? TopRatedMovieResponse)?.let {
-                                updateMovies(it.results)
+                                updateMovies(it.results as MutableList<TopRatedMovie>)
                             } ?: kotlin.run {
                                 updateMovies((it as PopularMovieResponse).results)
                             }

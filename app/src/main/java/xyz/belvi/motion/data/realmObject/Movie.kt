@@ -8,4 +8,5 @@ import xyz.belvi.motion.models.enums.MoviePosterSize
 interface Movie {
     fun getMovieTitle(): String
     fun getMoviePosterPath(moviePosterSize: MoviePosterSize): String
+    fun getMovieId(): Int
 }

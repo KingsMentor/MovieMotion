@@ -6,7 +6,7 @@ import io.realm.RealmModel
 import io.realm.RealmResults
 import xyz.belvi.motion.R
 import xyz.belvi.motion.app.MotionApp
-import xyz.belvi.motion.main.viewModel.MoviesVM
+import xyz.belvi.motion.movieMain.viewModel.MoviesVM
 import xyz.belvi.motion.models.enums.MovieFilter
 import xyz.belvi.motion.preferences.AppCache
 
@@ -49,4 +49,8 @@ fun ViewModel.resetPageCounter() {
 
 fun MovieFilter.updatePageCounter() {
     AppCache().updateLastRequested(this)
+}
+
+fun MovieFilter.currentPage(): Int {
+    return AppCache().currentPage(this)
 }

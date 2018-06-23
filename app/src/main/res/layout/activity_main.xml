@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    tools:context=".main.MainActivity">
+    tools:context=".movieMain.MainActivity">
 
     <android.support.v4.widget.DrawerLayout
         android:id="@id/drawer_layout"
@@ -70,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="right"
+            android:layout_marginLeft="100dp"
             app:itemTextColor="@color/nav_drawer_bg"
             app:menu="@menu/activity_main_menu_side_nav" />
     </android.support.v4.widget.DrawerLayout>

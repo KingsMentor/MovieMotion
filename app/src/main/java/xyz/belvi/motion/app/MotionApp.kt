@@ -3,6 +3,7 @@ package xyz.belvi.motion.app
 import android.app.Application
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 import xyz.belvi.motion.R
 
 /**
@@ -21,6 +22,7 @@ open class MotionApp : Application() {
         instance ?: kotlin.run {
             instance = this
             realmInit()
+            defineCalligraphy()
         }
     }
 
@@ -28,6 +30,14 @@ open class MotionApp : Application() {
         Realm.init(this)
         val config = RealmConfiguration.Builder().name(getString(R.string.realm_db_name)).build()
         Realm.setDefaultConfiguration(config)
+    }
+
+    private fun defineCalligraphy() {
+        CalligraphyConfig.initDefault(CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/source_code.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        )
     }
 
 }

@@ -21,6 +21,11 @@ android {
         }
     }
 }
+repositories {
+    // ...
+    maven { url "https://jitpack.io" }
+}
+
 
 dependencies {
     // testing
@@ -61,4 +66,7 @@ dependencies {
     // livecycle
     implementation 'android.arch.lifecycle:runtime:1.1.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
+
+    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
+    implementation 'com.github.deano2390:FlowTextView:2.0.5'
 }

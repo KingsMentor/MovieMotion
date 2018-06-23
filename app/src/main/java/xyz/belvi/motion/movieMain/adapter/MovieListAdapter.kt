@@ -1,4 +1,4 @@
-package xyz.belvi.motion.main.adapter
+package xyz.belvi.motion.movieMain.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -8,8 +8,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.motion_grid_item.view.*
 import xyz.belvi.motion.R
 import xyz.belvi.motion.data.realmObject.Movie
-import xyz.belvi.motion.data.realmObject.PopularMovie
-import xyz.belvi.motion.main.interfaceAdapters.MoviesFetchPresenter
+import xyz.belvi.motion.movieMain.interfaceAdapters.MoviesFetchPresenter
 import xyz.belvi.motion.models.enums.MoviePosterSize
 
 /**

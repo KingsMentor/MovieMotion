@@ -1,9 +1,14 @@
-package xyz.belvi.motion.main
+package xyz.belvi.motion.movieMain
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.util.Pair
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.GridLayoutManager
@@ -16,14 +21,16 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_toolbar.*
 import kotlinx.android.synthetic.main.failed_to_load.*
 import kotlinx.android.synthetic.main.loading_view.*
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import xyz.belvi.motion.R
 import xyz.belvi.motion.data.realmObject.Movie
 import xyz.belvi.motion.enchanceViews.EnhanceGridRecyclerView
 import xyz.belvi.motion.enchanceViews.GridSpacingItemDecoration
-import xyz.belvi.motion.main.adapter.MovieListAdapter
-import xyz.belvi.motion.main.interfaceAdapters.MoviesFetchPresenter
-import xyz.belvi.motion.main.viewModel.MoviesVM
+import xyz.belvi.motion.movieMain.adapter.MovieListAdapter
+import xyz.belvi.motion.movieMain.interfaceAdapters.MoviesFetchPresenter
+import xyz.belvi.motion.movieMain.viewModel.MoviesVM
 import xyz.belvi.motion.models.enums.findByResID
+import xyz.belvi.motion.movieDetails.MovieDetailedActivity
 import xyz.belvi.motion.preferences.getFilterType
 import xyz.belvi.motion.preferences.setFilterType
 
@@ -56,7 +63,7 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
             drawer_layout.closeDrawer(Gravity.END)
             true
         })
-        nav_view.menu.findItem(getFilterType().id).isCheckable = true
+        nav_view.menu.findItem(getFilterType().id).isChecked = true
         toolbar_title_view.text = String.format(getString(R.string.title_txt), getFilterType().friendlyName)
     }
 
@@ -128,7 +135,20 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
         loading_items.visibility = if (freshLoad) View.VISIBLE else View.GONE
     }
 
-    override fun movieSelected(view: View, movie: Movie, postion: Int) {
+    override fun movieSelected(view: View, movie: Movie, position: Int) {
+        val p1 = Pair.create(view, getString(R.string.postal_transition_name))
+        val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, p1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            startActivity(Intent(this, MovieDetailedActivity::class.java)
+                    .putExtra(MovieDetailedActivity.MOVIE_KEY, movie.getMovieId()), optionsCompat.toBundle())
+        } else {
+            startActivity(Intent(this, MovieDetailedActivity::class.java)
+                    .putExtra(MovieDetailedActivity.MOVIE_KEY, movie.getMovieId()))
+        }
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
 

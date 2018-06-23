@@ -44,6 +44,13 @@ class AppCache : SecurePref(MotionApp.instance?.applicationContext, AppCache::cl
             lastRequestedPopularPage += 1
     }
 
+    fun currentPage(filter: MovieFilter): Int {
+        return if (filter == MovieFilter.TOP_RATED)
+            lastRequestedRatedPage
+        else
+            lastRequestedPopularPage
+    }
+
 
 }
 
