@@ -16,13 +16,15 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main_toolbar.*
 import xyz.belvi.motion.R
+import xyz.belvi.motion.data.realmObject.Movie
 import xyz.belvi.motion.enchanceViews.EnhanceGridRecyclerView
 import xyz.belvi.motion.enchanceViews.GridSpacingItemDecoration
+import xyz.belvi.motion.main.interfaceAdapters.MoviesFetchPresenter
 
-class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll {
+class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll, MoviesFetchPresenter {
 
 
-    lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
+    private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
 
     private fun initSideNav() {
         setSupportActionBar(toolbar)
@@ -68,6 +70,19 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
 
     override fun reachedEndOfList() {
 
+    }
+
+    override fun onLoadCompleted() {
+
+    }
+
+    override fun onLoadFailure() {
+    }
+
+    override fun onLoadStarted(refresh: Boolean) {
+    }
+
+    override fun movieSelected(view: View, movie: Movie, postion: Int) {
     }
 
 

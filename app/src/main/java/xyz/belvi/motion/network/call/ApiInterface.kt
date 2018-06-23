@@ -11,6 +11,6 @@ import xyz.belvi.motion.models.retroResponse.MovieResponse
 interface ApiInterface {
 
     @GET("{path}")
-    abstract fun fetchMovies(@Path("path") sortType: String, @Query("api_key") apiKey: String, @Query("page") page: Int): io.reactivex.Observable<List<MovieResponse>>
+    abstract fun fetchMovies(@Path("path") sortType: String, @Query("api_key") apiKey: String, @Query("page") page: Int): io.reactivex.Observable<MovieResponse>
 
 }
