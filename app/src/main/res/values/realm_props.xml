@@ -1,0 +1,3 @@
+<resources>
+    <string name="realm_db_name" templateMergeStrategy="preserve" translatable="false">motion.realm</string>
+</resources>
