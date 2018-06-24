@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.content_movie_detailed_activty.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import xyz.belvi.motion.R
 import xyz.belvi.motion.data.realmObject.Movie
+import xyz.belvi.motion.models.enums.MovieFilter
 import xyz.belvi.motion.models.enums.MoviePosterSize
 import xyz.belvi.motion.movieDetails.presenter.MovieDetailsPresenter
 import xyz.belvi.motion.movieDetails.trailers.TrailersFragment
@@ -96,6 +97,7 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_movie_detailed_activty, menu)
         favItem = menu.findItem(R.id.action_fav)
+        favItem?.isVisible = getFilterType() != MovieFilter.FAVORITE
         movieId()?.let {
             movieDetailsVM.updateCheck(it)
         }

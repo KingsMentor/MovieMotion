@@ -28,19 +28,15 @@ class MovieDetailsVM : ViewModel() {
 
     }
 
-    fun updateCheck(movieId: Int){
+    fun updateCheck(movieId: Int) {
         this.mMovieDetailsPresenter?.markFavorite(isFavMovie(movieId))
     }
 
     fun addToFavoriteList(movie: Movie, state: Boolean) {
-        if (movie is FavMovie)
-            addOrRemoveFavMovie(movie, state)
-        else {
-            movie.toFavMovie()?.let {
-                addOrRemoveFavMovie(it, state)
-            }
+        movie.toFavMovie()?.let {
+            addOrRemoveFavMovie(it, state)
         }
-        this.mMovieDetailsPresenter?.markFavorite(isFavMovie(movie.getMovieId()))
+        this.mMovieDetailsPresenter?.markFavorite(state)
     }
 
     private fun presentMovieDetails(movieFilter: MovieFilter, movieId: Int) {
