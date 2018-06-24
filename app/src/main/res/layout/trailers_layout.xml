@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@id/trailers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:flexWrap="wrap" />
+
+    <ProgressBar
+        android:id="@id/trailer_loading_indicator"
+        android:layout_width="@dimen/trailer_pb_dimen"
+        android:layout_height="@dimen/trailer_pb_dimen"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:id="@id/retry_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <include layout="@layout/failed_to_load_trailer" />
+    </LinearLayout>
+</FrameLayout>

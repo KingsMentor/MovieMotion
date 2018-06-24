@@ -12,6 +12,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -67,6 +68,9 @@ dependencies {
     implementation 'android.arch.lifecycle:runtime:1.1.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
 
+    implementation 'com.android.support:multidex:1.0.3'
+
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
     implementation 'com.github.deano2390:FlowTextView:2.0.5'
+    implementation 'com.google.android:flexbox:0.3.2'
 }

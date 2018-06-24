@@ -57,10 +57,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:paddingBottom="16dp"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    app:autoSizeMaxTextSize="32dp"
+                    app:autoSizeMinTextSize="16dp"
+                    app:autoSizeTextType="uniform" />
 
             </android.support.v7.widget.LinearLayoutCompat>
 

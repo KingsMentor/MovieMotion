@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/ic_play_arrow_white_18dp" android:state_selected="false" />
+    <item android:drawable="@drawable/ic_play_arrow_selected_18dp" android:state_selected="true" />
+    <item android:drawable="@drawable/ic_play_arrow_selected_18dp" android:state_pressed="true" />
+    <item android:drawable="@drawable/ic_play_arrow_selected_18dp" android:state_activated="true" />
+    <item android:drawable="@drawable/ic_play_arrow_selected_18dp" android:state_focused="true" />
+</selector>

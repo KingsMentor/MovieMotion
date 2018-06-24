@@ -26,4 +26,8 @@
     <string name="movie_description">Movie Description</string>
     <string name="trailer_content_description">Trailer from %s</string>
 
+    <string name="trailers_load_failed">failed to load trailers</string>
+
+    <string name="play_trailer">play trailer</string>
+
 </resources>

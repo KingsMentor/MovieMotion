@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@id/trailer_txt_view"
+        fontPath="fonts/source_code_light.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/trailer_margin"
+        android:layout_marginTop="@dimen/trailer_margin"
+        android:background="@drawable/trailer_border_selector"
+        android:clickable="true"
+        android:contentDescription="@string/play_trailer"
+        android:drawablePadding="@dimen/trailer_padding"
+        android:drawableRight="@drawable/ic_play_arrow_selector_18dp"
+        android:focusableInTouchMode="true"
+        android:paddingBottom="@dimen/trailer_padding"
+        android:paddingLeft="@dimen/trailer_padding"
+        android:paddingRight="@dimen/trailer_padding"
+        android:paddingTop="@dimen/trailer_padding"
+        android:textColor="@color/trailer_color"
+        android:textSize="@dimen/trailer_item_txt_size"
+        android:textStyle="bold" />
+
+</LinearLayout>
+
+

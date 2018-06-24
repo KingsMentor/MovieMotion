@@ -1,6 +1,8 @@
 package xyz.belvi.motion.app
 
 import android.app.Application
+import android.content.Context
+import android.support.multidex.MultiDex
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
@@ -40,4 +42,8 @@ open class MotionApp : Application() {
         )
     }
 
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
+    }
 }

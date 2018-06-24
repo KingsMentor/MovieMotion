@@ -60,19 +60,19 @@ class MoviesVM : ViewModel() {
     private fun loadMoviesByFilter(filter: MovieFilter) {
         when (filter) {
             MovieFilter.POPULAR -> {
-                this.presenter?.onLoadStarted(isMovieListEmpty<PopularMovie>())
+                this.presenter?.onLoadStarted(isRealmListEmpty<PopularMovie>())
                 switchRealmObserver<PopularMovie>()
                 fetchMoviesFromApi<PopularMovie>(filter)
             }
             MovieFilter.TOP_RATED -> {
-                this.presenter?.onLoadStarted(isMovieListEmpty<TopRatedMovie>())
+                this.presenter?.onLoadStarted(isRealmListEmpty<TopRatedMovie>())
                 switchRealmObserver<TopRatedMovie>()
                 fetchMoviesFromApi<TopRatedMovie>(filter)
             }
             else -> {
-                this.presenter?.onLoadStarted(isMovieListEmpty<FavMovie>())
+                this.presenter?.onLoadStarted(isRealmListEmpty<FavMovie>())
                 switchRealmObserver<FavMovie>()
-                this.presenter?.onLoadCompleted(isMovieListEmpty<FavMovie>())
+                this.presenter?.onLoadCompleted(isRealmListEmpty<FavMovie>())
 
             }
         }
@@ -81,7 +81,7 @@ class MoviesVM : ViewModel() {
     private inline fun <reified T : RealmModel> switchRealmObserver() {
         rxDisposal.clear()
         rxDisposal.add(
-                fetchMovies<T>()?.asFlowable()?.subscribe {
+                fetch<T>()?.asFlowable()?.subscribe {
                     (it as? MutableList<Movie>)?.let {
                         if (it.isNotEmpty()) {
                             liveMovies.value = it
@@ -97,7 +97,7 @@ class MoviesVM : ViewModel() {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnError {
-                        this.presenter?.onLoadFailure(isMovieListEmpty<D>())
+                        this.presenter?.onLoadFailure(isRealmListEmpty<D>())
                     }
                     .onErrorResumeNext(io.reactivex.Observable.empty())
                     .map {
@@ -114,9 +114,9 @@ class MoviesVM : ViewModel() {
                     .subscribe {
                         it?.let {
                             if (filter.currentPage() == 1)
-                                clearMovies<D>()
-                            updateMovies(it.results as MutableList<D>)
-                            this.presenter?.onLoadCompleted(isMovieListEmpty<D>())
+                                clear<D>()
+                            update(it.results as MutableList<D>)
+                            this.presenter?.onLoadCompleted(it.results.size == 0)
                         }
                     }
         }
