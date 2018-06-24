@@ -1,8 +1,8 @@
 package xyz.belvi.motion.data.realmObject
 
-import au.com.helfie.molecheck.constants.IMG_PATH
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import xyz.belvi.motion.constants.IMG_PATH
 import xyz.belvi.motion.models.enums.MoviePosterSize
 
 /**

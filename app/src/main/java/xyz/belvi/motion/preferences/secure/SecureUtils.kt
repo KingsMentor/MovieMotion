@@ -3,8 +3,8 @@ package xyz.belvi.instasale.models.secure
 import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Base64
-import au.com.helfie.molecheck.constants.SHA_1
-import au.com.helfie.molecheck.constants.SHA_256
+import xyz.belvi.motion.constants.SHA_1
+import xyz.belvi.motion.constants.SHA_256
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 

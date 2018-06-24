@@ -10,10 +10,10 @@ import android.support.v7.widget.AppCompatTextView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import au.com.helfie.molecheck.constants.YOUTUBE_WATCH
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.trailers_layout.*
 import xyz.belvi.motion.R
+import xyz.belvi.motion.constants.YOUTUBE_WATCH
 import xyz.belvi.motion.data.realmObject.Movie
 import xyz.belvi.motion.data.realmObject.Trailer
 import xyz.belvi.motion.movieDetails.MovieDetailedActivity.Companion.MOVIE_KEY
