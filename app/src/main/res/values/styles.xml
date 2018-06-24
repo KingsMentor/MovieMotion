@@ -14,5 +14,13 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="MovieDetailsTheme" parent="AppTheme.PopupOverlay">
+        <!-- Customize your theme here. -->
+        <item name="colorControlNormal">@color/white</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="subtitleTextColor">@color/white</item>
+    </style>
+
+
 
 </resources>

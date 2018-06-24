@@ -4,9 +4,13 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_movie_detailed.*
 import kotlinx.android.synthetic.main.content_movie_detailed_activty.*
@@ -34,11 +38,31 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
     private fun movieId(): Int? = intent.getIntExtra(MOVIE_KEY, -1)
     private lateinit var movie: Movie
 
+    private fun initCustomTitleInteraction() {
+        layout_title.post({
+            val layoutParams = toolbar.layoutParams as CollapsingToolbarLayout.LayoutParams
+            layoutParams.height = layout_title.height
+            toolbar.layoutParams = layoutParams
+        })
+
+        app_bar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+
+            val mid = (toolbar_layout.width / 2) - (movie_title.width / 2)
+            val point = (Math.abs(verticalOffset) * mid) / appBarLayout.totalScrollRange
+            val font = (Math.abs(verticalOffset) * 14) / appBarLayout.totalScrollRange
+
+            movie_title.x = point.toFloat()
+            movie_title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42f - font)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_detailed)
         setSupportActionBar(toolbar)
+        initCustomTitleInteraction()
         supportActionBar?.apply {
+            title = ""
             setHomeButtonEnabled(true)
             setDisplayHomeAsUpEnabled(true)
         }
@@ -51,7 +75,6 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
                 }
             }
         }
-
 
     }
 
@@ -82,7 +105,7 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
     override fun presentDetails(movie: Movie): MovieDetailsPresenter {
         this.movie = movie
         Glide.with(this).load(movie.getMoviePosterPath(MoviePosterSize.w500)).into(img_postal)
-        Glide.with(this).load(movie.getMovieBackDropPosterPath(MoviePosterSize.w500)).into(thumbnail)
+        Glide.with(this).load(movie.getMovieBackDropPosterPath(MoviePosterSize.w342)).into(thumbnail)
         release_date.text = movie.getMovieReleaseDate()
         movie_title.text = movie.getMovieTitle()
         rating_txt.text = movie.getMovieVoteAverage()

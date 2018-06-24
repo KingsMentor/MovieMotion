@@ -9,17 +9,6 @@
 
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/movie_title"
-        fontPath="fonts/source_bold.ttf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:textColor="@color/white"
-        android:textSize="@dimen/movie_title_txt_size"
-        android:textStyle="bold" />
-
-    <android.support.v7.widget.AppCompatTextView
         android:id="@id/release_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -74,7 +63,7 @@
             android:layout_marginRight="@dimen/backdrop_img_right_margin"
             android:adjustViewBounds="true"
             android:contentDescription="@string/back_drp_img"
-            android:scaleType="fitXY" />
+            android:scaleType="center" />
 
     </uk.co.deanwild.flowtextview.FlowTextView>
 
