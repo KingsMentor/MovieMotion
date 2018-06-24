@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.AppCompatTextView
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.RxView
@@ -67,13 +68,15 @@ class TrailersFragment : Fragment(), TrailerPresenter {
     }
 
     private fun getTrailerView(trailer: Trailer): View {
-        val view = LayoutInflater.from(context).inflate(R.layout.trailer_item, null, true)
-        val trailerAppCompatTextView = view.findViewById<View>(R.id.trailer_txt_view) as AppCompatTextView
-        trailerAppCompatTextView.setText(trailer.name)
+        val view = LayoutInflater.from(context).inflate(R.layout.trailer_item, null, false)
+        val trailerAppCompatTextView = view.findViewById(R.id.trailer_txt_view) as AppCompatTextView
+        trailerAppCompatTextView.text = trailer.name
         trailerAppCompatTextView.contentDescription = String.format(getString(R.string.trailer_content_description), trailer.name)
-        RxView.clicks(trailerAppCompatTextView).subscribe {
+
+        trailerAppCompatTextView.setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_WATCH + trailer.key)))
         }
+
         return view
     }
 
