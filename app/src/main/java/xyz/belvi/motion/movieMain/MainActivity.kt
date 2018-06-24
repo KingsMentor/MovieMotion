@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
         }
         moviesVM = ViewModelProviders.of(this).get(MoviesVM::class.java)
 
-        moviesVM.bindWithModel(this@MainActivity, getFilterType()).observeForever {
+        moviesVM.bind(this@MainActivity, getFilterType()).observeForever {
             it?.let {
                 (movies.adapter as MovieListAdapter).updateItems(it)
             }

@@ -26,6 +26,26 @@ open class TopRatedMovie(
 
 ) : RealmObject(), Movie {
 
+    override fun getMovieBackDropPosterPath(moviePosterSize: MoviePosterSize): String {
+        return IMG_PATH + moviePosterSize.size + "/" + this.backdrop_path
+    }
+
+    override fun getMovieReleaseDate(): String {
+        return release_date
+    }
+
+    override fun getMovieVoteAverage(): String {
+        return vote_average.toString()
+    }
+
+    override fun getMovieMovieRating(): Float {
+        return (vote_average / 2f)
+    }
+
+    override fun getMovieOverview(): String {
+        return overview
+    }
+
     override fun getMovieId(): Int {
         return id
     }

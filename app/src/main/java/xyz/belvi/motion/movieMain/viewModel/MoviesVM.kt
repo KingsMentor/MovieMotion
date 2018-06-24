@@ -19,6 +19,10 @@ import xyz.belvi.motion.models.retroResponse.MovieResponse
 import xyz.belvi.motion.network.call.ApiInterface
 import xyz.belvi.motion.network.client.ApiClient.Companion.apiClient
 import com.google.gson.GsonBuilder
+import xyz.belvi.motion.utils.apiKey
+import xyz.belvi.motion.utils.currentPage
+import xyz.belvi.motion.utils.resetPageCounter
+import xyz.belvi.motion.utils.updatePageCounter
 
 
 /**
@@ -27,11 +31,11 @@ import com.google.gson.GsonBuilder
 class MoviesVM : ViewModel() {
 
     private var liveMovies: MutableLiveData<MutableList<Movie>> = MutableLiveData()
-    private lateinit var presenter: MoviesFetchPresenter
+    private var presenter: MoviesFetchPresenter? = null
     val rxDisposal = CompositeDisposable()
 
 
-    fun bindWithModel(presenter: MoviesFetchPresenter, filter: MovieFilter): LiveData<MutableList<Movie>> {
+    fun bind(presenter: MoviesFetchPresenter, filter: MovieFilter): LiveData<MutableList<Movie>> {
         resetPageCounter()
         this.presenter = presenter
         loadMoviesByFilter(filter)
@@ -41,7 +45,7 @@ class MoviesVM : ViewModel() {
     fun requestNextPage(filter: MovieFilter) {
         filter.updatePageCounter()
         if (filter == MovieFilter.POPULAR) {
-            this.presenter.onLoadStarted(false)
+            this.presenter?.onLoadStarted(false)
             fetchMoviesFromApi<PopularMovie>(filter)
         } else if (filter == MovieFilter.TOP_RATED) {
             fetchMoviesFromApi<TopRatedMovie>(filter)
@@ -49,26 +53,26 @@ class MoviesVM : ViewModel() {
     }
 
     fun switchFilter(movieFilter: MovieFilter) {
-        this.presenter.clearAdapter()
+        this.presenter?.clearAdapter()
         loadMoviesByFilter(movieFilter)
     }
 
     private fun loadMoviesByFilter(filter: MovieFilter) {
         when (filter) {
             MovieFilter.POPULAR -> {
-                this.presenter.onLoadStarted(isMovieListEmpty<PopularMovie>())
+                this.presenter?.onLoadStarted(isMovieListEmpty<PopularMovie>())
                 switchRealmObserver<PopularMovie>()
                 fetchMoviesFromApi<PopularMovie>(filter)
             }
             MovieFilter.TOP_RATED -> {
-                this.presenter.onLoadStarted(isMovieListEmpty<TopRatedMovie>())
+                this.presenter?.onLoadStarted(isMovieListEmpty<TopRatedMovie>())
                 switchRealmObserver<TopRatedMovie>()
                 fetchMoviesFromApi<TopRatedMovie>(filter)
             }
             else -> {
-                this.presenter.onLoadStarted(isMovieListEmpty<FavMovie>())
+                this.presenter?.onLoadStarted(isMovieListEmpty<FavMovie>())
                 switchRealmObserver<FavMovie>()
-                this.presenter.onLoadCompleted(isMovieListEmpty<FavMovie>())
+                this.presenter?.onLoadCompleted(isMovieListEmpty<FavMovie>())
 
             }
         }
@@ -93,7 +97,7 @@ class MoviesVM : ViewModel() {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnError {
-                        this.presenter.onLoadFailure(isMovieListEmpty<D>())
+                        this.presenter?.onLoadFailure(isMovieListEmpty<D>())
                     }
                     .onErrorResumeNext(io.reactivex.Observable.empty())
                     .map {
@@ -112,7 +116,7 @@ class MoviesVM : ViewModel() {
                             if (filter.currentPage() == 1)
                                 clearMovies<D>()
                             updateMovies(it.results as MutableList<D>)
-                            this.presenter.onLoadCompleted(isMovieListEmpty<D>())
+                            this.presenter?.onLoadCompleted(isMovieListEmpty<D>())
                         }
                     }
         }

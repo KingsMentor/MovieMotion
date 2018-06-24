@@ -9,7 +9,7 @@
 
 
     <android.support.v7.widget.AppCompatTextView
-        android:id="@id/title"
+        android:id="@+id/movie_title"
         fontPath="fonts/source_bold.ttf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -6,8 +6,10 @@ import io.realm.RealmModel
 import io.realm.RealmResults
 import xyz.belvi.motion.R
 import xyz.belvi.motion.app.MotionApp
+import xyz.belvi.motion.data.realmObject.FavMovie
 import xyz.belvi.motion.movieMain.viewModel.MoviesVM
 import xyz.belvi.motion.models.enums.MovieFilter
+import xyz.belvi.motion.movieDetails.viewModel.MovieDetailsVM
 import xyz.belvi.motion.preferences.AppCache
 
 /**
@@ -39,18 +41,21 @@ inline fun <reified T : RealmModel> MoviesVM.isMovieListEmpty(): Boolean {
     return Realm.getDefaultInstance().where(T::class.java)?.findAll()?.let { it.size == 0 } ?: kotlin.run { true }
 }
 
-fun ViewModel.apiKey(): String? {
-    return MotionApp.instance?.getString(R.string.movie_db_api_key)
+inline fun <reified T : RealmModel> MovieDetailsVM.findMovieById(movieID: Int): T? {
+    return Realm.getDefaultInstance().where(T::class.java)?.equalTo("id", movieID)?.findFirst()
 }
 
-fun ViewModel.resetPageCounter() {
-    AppCache().resetLastRequestedPage()
+fun MovieDetailsVM.isFavMovie(movieID: Int): Boolean {
+    return Realm.getDefaultInstance().where(FavMovie::class.java)?.equalTo("id", movieID)?.findFirst()?.let { true } ?: kotlin.run { false }
 }
 
-fun MovieFilter.updatePageCounter() {
-    AppCache().updateLastRequested(this)
-}
-
-fun MovieFilter.currentPage(): Int {
-    return AppCache().currentPage(this)
+fun MovieDetailsVM.addOrRemoveFavMovie(favMovie: FavMovie, state: Boolean) {
+    val realm = Realm.getDefaultInstance()
+    realm.beginTransaction()
+    if (state)
+        realm.insertOrUpdate(favMovie)
+    else
+        realm.where(FavMovie::class.java)?.equalTo("id", favMovie.id)?.findAll()?.deleteAllFromRealm()
+    realm.commitTransaction()
+    realm.close()
 }
