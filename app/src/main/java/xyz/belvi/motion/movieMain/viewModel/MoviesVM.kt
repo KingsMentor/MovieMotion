@@ -3,7 +3,7 @@ package xyz.belvi.motion.movieMain.viewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -13,12 +13,13 @@ import xyz.belvi.motion.data.realmObject.FavMovie
 import xyz.belvi.motion.data.realmObject.Movie
 import xyz.belvi.motion.data.realmObject.PopularMovie
 import xyz.belvi.motion.data.realmObject.TopRatedMovie
-import xyz.belvi.motion.movieMain.interfaceAdapters.MoviesFetchPresenter
+import xyz.belvi.motion.movieMain.presenter.MoviesFetchPresenter
 import xyz.belvi.motion.models.enums.MovieFilter
-import xyz.belvi.motion.models.retroResponse.PopularMovieResponse
-import xyz.belvi.motion.models.retroResponse.TopRatedMovieResponse
+import xyz.belvi.motion.models.retroResponse.MovieResponse
 import xyz.belvi.motion.network.call.ApiInterface
 import xyz.belvi.motion.network.client.ApiClient.Companion.apiClient
+import com.google.gson.GsonBuilder
+
 
 /**
  * Created by zone2 on 6/23/18.
@@ -41,9 +42,9 @@ class MoviesVM : ViewModel() {
         filter.updatePageCounter()
         if (filter == MovieFilter.POPULAR) {
             this.presenter.onLoadStarted(false)
-            fetchMoviesFromApi<PopularMovieResponse, PopularMovie>(filter)
+            fetchMoviesFromApi<PopularMovie>(filter)
         } else if (filter == MovieFilter.TOP_RATED) {
-            fetchMoviesFromApi<TopRatedMovieResponse, TopRatedMovie>(filter)
+            fetchMoviesFromApi<TopRatedMovie>(filter)
         }
     }
 
@@ -57,12 +58,12 @@ class MoviesVM : ViewModel() {
             MovieFilter.POPULAR -> {
                 this.presenter.onLoadStarted(isMovieListEmpty<PopularMovie>())
                 switchRealmObserver<PopularMovie>()
-                fetchMoviesFromApi<PopularMovieResponse, PopularMovie>(filter)
+                fetchMoviesFromApi<PopularMovie>(filter)
             }
             MovieFilter.TOP_RATED -> {
                 this.presenter.onLoadStarted(isMovieListEmpty<TopRatedMovie>())
                 switchRealmObserver<TopRatedMovie>()
-                fetchMoviesFromApi<TopRatedMovieResponse, TopRatedMovie>(filter)
+                fetchMoviesFromApi<TopRatedMovie>(filter)
             }
             else -> {
                 this.presenter.onLoadStarted(isMovieListEmpty<FavMovie>())
@@ -77,16 +78,16 @@ class MoviesVM : ViewModel() {
         rxDisposal.clear()
         rxDisposal.add(
                 fetchMovies<T>()?.asFlowable()?.subscribe {
-                    it.let {
+                    (it as? MutableList<Movie>)?.let {
                         if (it.isNotEmpty()) {
-                            liveMovies.value = it as MutableList<Movie>
+                            liveMovies.value = it
                         }
                     }
                 }!!
         )
     }
 
-    private inline fun <reified T, reified D : RealmModel> fetchMoviesFromApi(filter: MovieFilter) {
+    private inline fun <reified D : RealmModel> fetchMoviesFromApi(filter: MovieFilter) {
         apiKey()?.let { apiKey ->
             apiClient.create(ApiInterface::class.java).fetchMovies(filter.path, apiKey, filter.currentPage())
                     .subscribeOn(Schedulers.io())
@@ -95,16 +96,22 @@ class MoviesVM : ViewModel() {
                         this.presenter.onLoadFailure(isMovieListEmpty<D>())
                     }
                     .onErrorResumeNext(io.reactivex.Observable.empty())
-                    .map { Gson().fromJson(it.asJsonObject.toString(), T::class.java) }
+                    .map {
+                        val gson = GsonBuilder()
+                        return@map if (filter == MovieFilter.POPULAR)
+                            gson.create().fromJson<MovieResponse<PopularMovie>>(it.asJsonObject.toString(), object : TypeToken<MovieResponse<PopularMovie>>() {
+
+                            }.type)
+                        else
+                            gson.create().fromJson<MovieResponse<TopRatedMovie>>(it.asJsonObject.toString(), object : TypeToken<MovieResponse<TopRatedMovie>>() {
+
+                            }.type)
+                    }
                     .subscribe {
                         it?.let {
                             if (filter.currentPage() == 1)
                                 clearMovies<D>()
-                            (it as? TopRatedMovieResponse)?.let {
-                                updateMovies(it.results as MutableList<TopRatedMovie>)
-                            } ?: kotlin.run {
-                                updateMovies((it as PopularMovieResponse).results)
-                            }
+                            updateMovies(it.results as MutableList<D>)
                             this.presenter.onLoadCompleted(isMovieListEmpty<D>())
                         }
                     }

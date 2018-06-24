@@ -6,7 +6,7 @@ import xyz.belvi.motion.data.realmObject.PopularMovie
  * Created by zone2 on 6/23/18.
  */
 
-data class PopularMovieResponse(
+data class MovieResponse<T>(
         val page: Int,
-        val results: MutableList<PopularMovie>)
+        val results: MutableList<T>)
 

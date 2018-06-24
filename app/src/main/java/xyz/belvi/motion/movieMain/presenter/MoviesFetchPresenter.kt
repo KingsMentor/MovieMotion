@@ -1,4 +1,4 @@
-package xyz.belvi.motion.movieMain.interfaceAdapters
+package xyz.belvi.motion.movieMain.presenter
 
 import android.view.View
 import xyz.belvi.motion.data.realmObject.Movie

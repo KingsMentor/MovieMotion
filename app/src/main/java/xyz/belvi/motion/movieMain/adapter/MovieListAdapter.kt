@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.motion_grid_item.view.*
 import xyz.belvi.motion.R
 import xyz.belvi.motion.data.realmObject.Movie
-import xyz.belvi.motion.movieMain.interfaceAdapters.MoviesFetchPresenter
+import xyz.belvi.motion.movieMain.presenter.MoviesFetchPresenter
 import xyz.belvi.motion.models.enums.MoviePosterSize
 
 /**

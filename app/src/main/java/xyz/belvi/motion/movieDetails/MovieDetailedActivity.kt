@@ -8,8 +8,11 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_movie_detailed.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import xyz.belvi.motion.R
+import xyz.belvi.motion.data.realmObject.Movie
+import xyz.belvi.motion.movieDetails.presenter.MovieDetailsPresenter
 
-class MovieDetailedActivity : AppCompatActivity() {
+class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
+
 
     companion object {
 
@@ -17,6 +20,7 @@ class MovieDetailedActivity : AppCompatActivity() {
 
     }
 
+    lateinit var favItem: MenuItem
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_detailed)
@@ -39,12 +43,19 @@ class MovieDetailedActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_movie_detailed_activty, menu)
-        val favItem = menu.findItem(R.id.action_fav)
+        favItem = menu.findItem(R.id.action_fav)
         return super.onCreateOptionsMenu(menu)
     }
 
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+    }
+
+    override fun markFavorite(isFav: Boolean) {
+        favItem.setIcon(if (isFav) R.drawable.ic_star_white_selected else R.drawable.ic_star_white_24dp)
+    }
+
+    override fun presentDetails(movie: Movie) {
     }
 }

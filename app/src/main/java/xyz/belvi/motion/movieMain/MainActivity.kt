@@ -27,7 +27,7 @@ import xyz.belvi.motion.data.realmObject.Movie
 import xyz.belvi.motion.enchanceViews.EnhanceGridRecyclerView
 import xyz.belvi.motion.enchanceViews.GridSpacingItemDecoration
 import xyz.belvi.motion.movieMain.adapter.MovieListAdapter
-import xyz.belvi.motion.movieMain.interfaceAdapters.MoviesFetchPresenter
+import xyz.belvi.motion.movieMain.presenter.MoviesFetchPresenter
 import xyz.belvi.motion.movieMain.viewModel.MoviesVM
 import xyz.belvi.motion.models.enums.findByResID
 import xyz.belvi.motion.movieDetails.MovieDetailedActivity
