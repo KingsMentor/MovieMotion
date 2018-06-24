@@ -19,6 +19,7 @@ import xyz.belvi.motion.R
 import xyz.belvi.motion.data.realmObject.Movie
 import xyz.belvi.motion.models.enums.MoviePosterSize
 import xyz.belvi.motion.movieDetails.presenter.MovieDetailsPresenter
+import xyz.belvi.motion.movieDetails.trailers.TrailersFragment
 import xyz.belvi.motion.movieDetails.viewModel.MovieDetailsVM
 import xyz.belvi.motion.movieMain.viewModel.MoviesVM
 import xyz.belvi.motion.preferences.getFilterType
@@ -52,7 +53,7 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
             val font = (Math.abs(verticalOffset) * 14) / appBarLayout.totalScrollRange
 
             movie_title.x = point.toFloat()
-            movie_title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 42f - font)
+            movie_title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32f - font)
         }
     }
 
@@ -74,7 +75,11 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
                     presentDetails(it)
                 }
             }
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.trailers_and_reviews, TrailersFragment().newInstance(it))
+                    .commitAllowingStateLoss()
         }
+
 
     }
 

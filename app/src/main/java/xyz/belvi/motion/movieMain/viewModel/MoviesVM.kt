@@ -44,10 +44,12 @@ class MoviesVM : ViewModel() {
 
     fun requestNextPage(filter: MovieFilter) {
         filter.updatePageCounter()
+
         if (filter == MovieFilter.POPULAR) {
             this.presenter?.onLoadStarted(false)
             fetchMoviesFromApi<PopularMovie>(filter)
         } else if (filter == MovieFilter.TOP_RATED) {
+            this.presenter?.onLoadStarted(false)
             fetchMoviesFromApi<TopRatedMovie>(filter)
         }
     }

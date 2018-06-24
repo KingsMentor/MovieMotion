@@ -57,6 +57,9 @@ class TrailersVM : ViewModel() {
                     }
                     .onErrorResumeNext(io.reactivex.Observable.empty())
                     .subscribe {
+                        it.results.forEach {
+                            it.movieId = movieId
+                        }
                         update(it.results)
                         mPresenter?.onLoadCompleted(it.results.size == 0)
                     }

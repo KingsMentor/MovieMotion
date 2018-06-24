@@ -63,9 +63,7 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:textColor="@color/white"
-                    app:autoSizeMaxTextSize="32dp"
-                    app:autoSizeMinTextSize="16dp"
-                    app:autoSizeTextType="uniform" />
+                    android:textSize="32sp" />
 
             </android.support.v7.widget.LinearLayoutCompat>
 
