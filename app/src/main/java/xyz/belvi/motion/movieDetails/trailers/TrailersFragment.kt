@@ -51,10 +51,12 @@ class TrailersFragment : Fragment(), TrailerPresenter {
         super.onViewCreated(view, savedInstanceState)
         trailersVM = ViewModelProviders.of(this).get(TrailersVM::class.java)
         getMovieId()?.let { id ->
-            trailersVM.bind(this, id).observeForever {
-                trailers.removeAllViews()
-                it?.forEach {
-                    trailers.addView(getTrailerView(it))
+            trailersVM.bind(this, id).observeForever { result ->
+                trailers?.let {
+                    trailers.removeAllViews()
+                    result?.forEach {
+                        trailers.addView(getTrailerView(it))
+                    }
                 }
 
             }

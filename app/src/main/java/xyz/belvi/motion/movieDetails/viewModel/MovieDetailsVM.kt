@@ -12,6 +12,7 @@ import xyz.belvi.motion.data.realmObject.PopularMovie
 import xyz.belvi.motion.data.realmObject.TopRatedMovie
 import xyz.belvi.motion.models.enums.MovieFilter
 import xyz.belvi.motion.movieDetails.presenter.MovieDetailsPresenter
+import xyz.belvi.motion.utils.toFavMovie
 
 /**
  * Created by zone2 on 6/24/18.
@@ -27,8 +28,19 @@ class MovieDetailsVM : ViewModel() {
 
     }
 
+    fun updateCheck(movieId: Int){
+        this.mMovieDetailsPresenter?.markFavorite(isFavMovie(movieId))
+    }
+
     fun addToFavoriteList(movie: Movie, state: Boolean) {
-        addOrRemoveFavMovie(movie as FavMovie, state)
+        if (movie is FavMovie)
+            addOrRemoveFavMovie(movie, state)
+        else {
+            movie.toFavMovie()?.let {
+                addOrRemoveFavMovie(it, state)
+            }
+        }
+        this.mMovieDetailsPresenter?.markFavorite(isFavMovie(movie.getMovieId()))
     }
 
     private fun presentMovieDetails(movieFilter: MovieFilter, movieId: Int) {

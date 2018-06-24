@@ -86,14 +86,19 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home)
             onBackPressed()
-        else
+        else {
+            item.isChecked = !item.isChecked
             movieDetailsVM.addToFavoriteList(movie, item.isChecked)
+        }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_movie_detailed_activty, menu)
         favItem = menu.findItem(R.id.action_fav)
+        movieId()?.let {
+            movieDetailsVM.updateCheck(it)
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
