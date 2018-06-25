@@ -23,9 +23,9 @@ import kotlinx.android.synthetic.main.failed_to_load.*
 import kotlinx.android.synthetic.main.loading_view.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import xyz.belvi.motion.R
-import xyz.belvi.motion.data.realmObject.Movie
-import xyz.belvi.motion.enchanceViews.EnhanceGridRecyclerView
-import xyz.belvi.motion.enchanceViews.GridSpacingItemDecoration
+import xyz.belvi.motion.custonViews.EnhanceGridRecyclerView
+import xyz.belvi.motion.custonViews.GridSpacingItemDecoration
+import xyz.belvi.motion.data.realmObject.MotionMovie
 import xyz.belvi.motion.movieMain.adapter.MovieListAdapter
 import xyz.belvi.motion.movieMain.presenter.MoviesFetchPresenter
 import xyz.belvi.motion.movieMain.viewModel.MoviesVM
@@ -34,6 +34,7 @@ import xyz.belvi.motion.movieDetails.MovieDetailedActivity
 import xyz.belvi.motion.preferences.getFilterType
 import xyz.belvi.motion.preferences.setFilterType
 import xyz.belvi.motion.search.SearchActivity
+import xyz.belvi.motion.utils.showMovieDetails
 
 class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll, MoviesFetchPresenter {
 
@@ -142,16 +143,8 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
         loading_items.visibility = if (freshLoad) View.VISIBLE else View.GONE
     }
 
-    override fun movieSelected(view: View, movie: Movie, position: Int) {
-        val p1 = Pair.create(view, getString(R.string.postal_transition_name))
-        val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, p1)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            startActivity(Intent(this, MovieDetailedActivity::class.java)
-                    .putExtra(MovieDetailedActivity.MOVIE_KEY, movie.getMovieId()), optionsCompat.toBundle())
-        } else {
-            startActivity(Intent(this, MovieDetailedActivity::class.java)
-                    .putExtra(MovieDetailedActivity.MOVIE_KEY, movie.getMovieId()))
-        }
+    override fun movieSelected(view: View, movie: MotionMovie) {
+        showMovieDetails(view,movie)
     }
 
     override fun attachBaseContext(newBase: Context) {

@@ -6,23 +6,21 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_movie_detailed.*
 import kotlinx.android.synthetic.main.content_movie_detailed_activty.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import xyz.belvi.motion.R
+import xyz.belvi.motion.data.realmObject.FavMovie
 import xyz.belvi.motion.data.realmObject.Movie
 import xyz.belvi.motion.models.enums.MovieFilter
 import xyz.belvi.motion.models.enums.MoviePosterSize
 import xyz.belvi.motion.movieDetails.presenter.MovieDetailsPresenter
 import xyz.belvi.motion.movieDetails.trailers.TrailersFragment
 import xyz.belvi.motion.movieDetails.viewModel.MovieDetailsVM
-import xyz.belvi.motion.movieMain.viewModel.MoviesVM
 import xyz.belvi.motion.preferences.getFilterType
 
 class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
@@ -37,8 +35,7 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
     var favItem: MenuItem? = null
     private lateinit var movieDetailsVM: MovieDetailsVM
 
-    private fun movieId(): Int? = intent.getIntExtra(MOVIE_KEY, -1)
-    private lateinit var movie: Movie
+    private fun movie(): Movie? = intent.getParcelableExtra(MOVIE_KEY)
 
     private fun initCustomTitleInteraction() {
         layout_title.post({
@@ -58,6 +55,23 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
         }
     }
 
+    private fun presentDetails(movie: Movie) {
+        val stubMovie = FavMovie(movie.id, movie)
+        Glide.with(this).load(stubMovie.getMoviePosterPath(MoviePosterSize.w500)).into(img_postal)
+        Glide.with(this).load(stubMovie.getMovieBackDropPosterPath(MoviePosterSize.w342)).into(thumbnail)
+        release_date.text = stubMovie.getMovieReleaseDate()
+        movie_title.text = stubMovie.getMovieTitle()
+        rating_txt.text = stubMovie.getMovieVoteAverage()
+        ftv.apply {
+            text = stubMovie.getMovieOverview()
+            setTextSize(24f)
+            textColor = ContextCompat.getColor(this@MovieDetailedActivity, R.color.white)
+        }
+        rating.rating = stubMovie.getMovieMovieRating()
+
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_detailed)
@@ -70,15 +84,12 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
         }
 
         movieDetailsVM = ViewModelProviders.of(this).get(MovieDetailsVM::class.java)
-        movieId()?.let {
-            movieDetailsVM.bind(this@MovieDetailedActivity, getFilterType(), it).observeForever {
-                it?.let {
-                    presentDetails(it)
-                }
-            }
+        movie()?.let {
+            movieDetailsVM.bind(this@MovieDetailedActivity)
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.trailers_and_reviews, TrailersFragment().newInstance(it))
+                    .replace(R.id.trailers_and_reviews, TrailersFragment().newInstance(it.id))
                     .commitAllowingStateLoss()
+            presentDetails(it)
         }
 
 
@@ -89,7 +100,10 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
             onBackPressed()
         else {
             item.isChecked = !item.isChecked
-            movieDetailsVM.addToFavoriteList(movie, item.isChecked)
+            movie()?.let {
+                movieDetailsVM.addToFavoriteList(FavMovie(it.id, it), item.isChecked)
+            }
+
         }
         return super.onOptionsItemSelected(item)
     }
@@ -98,8 +112,8 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
         menuInflater.inflate(R.menu.menu_movie_detailed_activty, menu)
         favItem = menu.findItem(R.id.action_fav)
         favItem?.isVisible = getFilterType() != MovieFilter.FAVORITE
-        movieId()?.let {
-            movieDetailsVM.updateCheck(it)
+        movie()?.let {
+            movieDetailsVM.updateCheck(it.id)
         }
         return super.onCreateOptionsMenu(menu)
     }
@@ -114,19 +128,5 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
         return this
     }
 
-    override fun presentDetails(movie: Movie): MovieDetailsPresenter {
-        this.movie = movie
-        Glide.with(this).load(movie.getMoviePosterPath(MoviePosterSize.w500)).into(img_postal)
-        Glide.with(this).load(movie.getMovieBackDropPosterPath(MoviePosterSize.w342)).into(thumbnail)
-        release_date.text = movie.getMovieReleaseDate()
-        movie_title.text = movie.getMovieTitle()
-        rating_txt.text = movie.getMovieVoteAverage()
-        ftv.apply {
-            text = movie.getMovieOverview()
-            setTextSize(24f)
-            textColor = ContextCompat.getColor(this@MovieDetailedActivity, R.color.white)
-        }
-        rating.rating = movie.getMovieMovieRating()
-        return this
-    }
+
 }

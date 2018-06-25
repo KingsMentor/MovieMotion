@@ -9,7 +9,6 @@ import io.reactivex.schedulers.Schedulers
 import xyz.belvi.motion.data.client.fetchById
 import xyz.belvi.motion.data.client.isRealmListEmpty
 import xyz.belvi.motion.data.client.update
-import xyz.belvi.motion.data.realmObject.Movie
 import xyz.belvi.motion.data.realmObject.Trailer
 import xyz.belvi.motion.movieDetails.presenter.TrailerPresenter
 import xyz.belvi.motion.network.call.ApiInterface

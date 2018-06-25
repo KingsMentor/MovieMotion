@@ -1,6 +1,5 @@
 package xyz.belvi.motion.movieDetails.trailers
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.net.Uri
@@ -8,19 +7,16 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.AppCompatTextView
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.trailers_layout.*
 import xyz.belvi.motion.R
 import xyz.belvi.motion.constants.YOUTUBE_WATCH
-import xyz.belvi.motion.data.realmObject.Movie
 import xyz.belvi.motion.data.realmObject.Trailer
 import xyz.belvi.motion.movieDetails.MovieDetailedActivity.Companion.MOVIE_KEY
 import xyz.belvi.motion.movieDetails.presenter.TrailerPresenter
 import xyz.belvi.motion.movieDetails.viewModel.TrailersVM
-import xyz.belvi.motion.movieMain.viewModel.MoviesVM
 
 /**
  * Created by zone2 on 6/24/18.
@@ -56,6 +52,7 @@ class TrailersFragment : Fragment(), TrailerPresenter {
                 trailers?.let {
                     trailers.removeAllViews()
                     result?.forEach {
+                        trailer_loading_indicator.visibility = View.GONE
                         trailers.addView(getTrailerView(it))
                     }
                 }

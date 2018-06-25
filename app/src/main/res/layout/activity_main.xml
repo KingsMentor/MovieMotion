@@ -31,7 +31,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <xyz.belvi.motion.enchanceViews.EnhanceGridRecyclerView
+                    <xyz.belvi.motion.custonViews.EnhanceGridRecyclerView
                         android:id="@id/movies"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

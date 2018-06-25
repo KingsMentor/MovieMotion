@@ -11,38 +11,32 @@ import xyz.belvi.motion.models.enums.MoviePosterSize
 open class PopularMovie(
         @PrimaryKey
         var id: Int = 0,
-        var voteCount: Int = 0,
-        var video: Boolean = false,
-        var vote_average: Float = 0f,
-        var title: String = "",
-        var popularity: Float = 0f,
-        var poster_path: String = "",
-        var original_language: String = "",
-        var original_title: String = "",
-        var backdrop_path: String? = "",
-        var adult: Boolean = false,
-        var overview: String = "",
-        var release_date: String = ""
+        var movie: Movie? = Movie()
 
-) : RealmObject(), Movie {
+) : RealmObject(), MotionMovie {
+
+    override fun getMovieItem(): Movie? {
+        return movie
+    }
+
     override fun getMovieBackDropPosterPath(moviePosterSize: MoviePosterSize): String {
-        return IMG_PATH + moviePosterSize.size + "/" + this.backdrop_path
+        return IMG_PATH + moviePosterSize.size + "/" + this.movie?.backdrop_path
     }
 
     override fun getMovieReleaseDate(): String {
-        return release_date
+        return movie?.release_date ?: kotlin.run { "" }
     }
 
     override fun getMovieVoteAverage(): String {
-        return vote_average.toString()
+        return movie?.vote_average?.toString() ?: kotlin.run { "" }
     }
 
     override fun getMovieMovieRating(): Float {
-        return (vote_average / 2f)
+        return (movie?.vote_average ?: kotlin.run { 0 } / 2f)
     }
 
     override fun getMovieOverview(): String {
-        return overview
+        return movie?.overview ?: kotlin.run { "" }
     }
 
     override fun getMovieId(): Int {
@@ -50,11 +44,11 @@ open class PopularMovie(
     }
 
     override fun getMovieTitle(): String {
-        return title
+        return movie?.title ?: kotlin.run { "" }
     }
 
     override fun getMoviePosterPath(moviePosterSize: MoviePosterSize): String {
-        return IMG_PATH + moviePosterSize.size + "/" + this.poster_path
+        return IMG_PATH + moviePosterSize.size + "/" + this.movie?.poster_path
     }
 
     constructor() : this(id = 0)

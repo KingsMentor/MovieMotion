@@ -31,7 +31,7 @@
                 android:padding="8dp"
                 android:textColor="@color/white"
                 android:textColorHint="#aaaaaa"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
             <include layout="@layout/search_btn" />
         </android.support.v7.widget.LinearLayoutCompat>
@@ -41,26 +41,8 @@
         android:id="@+id/progress_indicator"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="6dp"
+        android:layout_height="10dp"
         android:indeterminate="true" />
 
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include
-            android:id="@id/empty_view"
-            layout="@layout/empty_load"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-        <xyz.belvi.motion.enchanceViews.EnhanceRecyclerView
-            android:id="@+id/search_recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-
-    </FrameLayout>
+    <include layout="@layout/search_recycler_view" />
 </android.support.v7.widget.LinearLayoutCompat>

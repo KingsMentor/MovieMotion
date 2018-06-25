@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import io.realm.RealmModel
 import xyz.belvi.motion.data.client.*
 import xyz.belvi.motion.data.realmObject.FavMovie
-import xyz.belvi.motion.data.realmObject.Movie
+import xyz.belvi.motion.data.realmObject.MotionMovie
 import xyz.belvi.motion.data.realmObject.PopularMovie
 import xyz.belvi.motion.data.realmObject.TopRatedMovie
 import xyz.belvi.motion.movieMain.presenter.MoviesFetchPresenter
@@ -19,10 +19,7 @@ import xyz.belvi.motion.models.retroResponse.MovieResponse
 import xyz.belvi.motion.network.call.ApiInterface
 import xyz.belvi.motion.network.client.ApiClient.Companion.apiClient
 import com.google.gson.GsonBuilder
-import xyz.belvi.motion.utils.apiKey
-import xyz.belvi.motion.utils.currentPage
-import xyz.belvi.motion.utils.resetPageCounter
-import xyz.belvi.motion.utils.updatePageCounter
+import xyz.belvi.motion.utils.*
 
 
 /**
@@ -30,12 +27,12 @@ import xyz.belvi.motion.utils.updatePageCounter
  */
 class MoviesVM : ViewModel() {
 
-    private var liveMovies: MutableLiveData<MutableList<Movie>> = MutableLiveData()
+    private var liveMovies: MutableLiveData<MutableList<MotionMovie>> = MutableLiveData()
     private var presenter: MoviesFetchPresenter? = null
     val rxDisposal = CompositeDisposable()
 
 
-    fun bind(presenter: MoviesFetchPresenter, filter: MovieFilter): LiveData<MutableList<Movie>> {
+    fun bind(presenter: MoviesFetchPresenter, filter: MovieFilter): LiveData<MutableList<MotionMovie>> {
         resetPageCounter()
         this.presenter = presenter
         loadMoviesByFilter(filter)
@@ -84,7 +81,7 @@ class MoviesVM : ViewModel() {
         rxDisposal.clear()
         rxDisposal.add(
                 fetch<T>()?.asFlowable()?.subscribe {
-                    (it as? MutableList<Movie>)?.let {
+                    (it as? MutableList<MotionMovie>)?.let {
                         if (it.isNotEmpty()) {
                             liveMovies.value = it
                         }
@@ -102,26 +99,23 @@ class MoviesVM : ViewModel() {
                         this.presenter?.onLoadFailure(isRealmListEmpty<D>())
                     }
                     .onErrorResumeNext(io.reactivex.Observable.empty())
-                    .map {
-                        val gson = GsonBuilder()
-                        return@map if (filter == MovieFilter.POPULAR)
-                            gson.create().fromJson<MovieResponse<PopularMovie>>(it.asJsonObject.toString(), object : TypeToken<MovieResponse<PopularMovie>>() {
-
-                            }.type)
-                        else
-                            gson.create().fromJson<MovieResponse<TopRatedMovie>>(it.asJsonObject.toString(), object : TypeToken<MovieResponse<TopRatedMovie>>() {
-
-                            }.type)
-                    }
                     .subscribe {
                         it?.let {
                             if (filter.currentPage() == 1)
                                 clear<D>()
-                            update(it.results as MutableList<D>)
+                            if (filter == MovieFilter.TOP_RATED)
+                                update(it.results.toTopRatedMovies())
+                            else
+                                update(it.results.toPopularMovies())
                             this.presenter?.onLoadCompleted(it.results.size == 0)
                         }
                     }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        rxDisposal.clear()
     }
 
 }

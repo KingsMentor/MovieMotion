@@ -31,5 +31,6 @@
 
     <string name="play_trailer">play trailer</string>
     <string name="search">Search</string>
+    <string name="failed_to_load">Failed to load</string>
 
 </resources>
