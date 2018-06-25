@@ -37,67 +37,90 @@ repositories {
 
 dependencies {
 
-
-    testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.8"
-    testCompile 'org.jetbrains.kotlin:kotlin-stdlib:1.2.41'
-    testCompile 'org.jetbrains.kotlin:kotlin-test-junit:1.2.10'
-    testCompile "com.nhaarman:mockito-kotlin:1.1.0"
-    testCompile 'org.amshove.kluent:kluent:1.14'
-
+    /**
+     * for unit testing
+     */
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.robolectric:robolectric:3.8"
+    testImplementation 'org.jetbrains.kotlin:kotlin-stdlib:1.2.41'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit:1.2.10'
+    testImplementation "com.nhaarman:mockito-kotlin:1.1.0"
+    testImplementation 'org.amshove.kluent:kluent:1.14'
+    testImplementation "org.robolectric:robolectric:3.8"
+    testImplementation "org.mockito:mockito-core:2.+"
+    testImplementation 'org.jetbrains.kotlin:kotlin-stdlib:1.2.41'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit:1.2.10'
+    testImplementation "com.nhaarman:mockito-kotlin:1.1.0"
+    testImplementation 'org.amshove.kluent:kluent:1.14'
     testImplementation "org.robolectric:multidex:3.4.2"
+
+    /**
+     * for Android testing
+     */
     androidTestCompile 'com.android.support.test:runner:1.0.2'
     androidTestCompile 'com.android.support.test:rules:1.0.2'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.2'
     androidTestCompile 'com.android.support:support-annotations:27.1.1'
-    testCompile "org.robolectric:robolectric:3.8"
-    testCompile "org.mockito:mockito-core:2.+"
     androidTestCompile 'org.mockito:mockito-android:2.7.22'
-    testCompile 'org.jetbrains.kotlin:kotlin-stdlib:1.2.41'
-    testCompile 'org.jetbrains.kotlin:kotlin-test-junit:1.2.10'
-    testCompile "com.nhaarman:mockito-kotlin:1.1.0"
-    testCompile 'org.amshove.kluent:kluent:1.14'
 
-    // kotlin
+    /**
+     * kotlin
+     */
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
-    // support libraries
+    /**
+     * support libraries
+     */
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
     implementation "com.android.support:design:$supportLibraryVersion"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 
-    // images and json animation
+    /**
+     * images and json animation
+     */
     implementation 'com.airbnb.android:lottie:2.5.1'
     implementation 'com.github.bumptech.glide:glide:4.6.1'
 
-    // network dependencies
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    /**
+     * network
+     */
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
 
-    // Rx
+    /**
+     * Rx
+     */
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.8'
     implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.1.1'
     implementation 'com.amitshekhar.android:rx2-android-networking:1.0.1'
 
     /**
-     * storage
+     *  secure storage
      */
     implementation 'com.scottyab:secure-preferences-lib:0.1.4'
 
-    // livecycle
-    implementation 'android.arch.lifecycle:runtime:1.1.1'
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    /**
+     * livecycle and andrid architecture
+     */
+    implementation "android.arch.lifecycle:runtime:$lifeCycleVersion"
+    implementation "android.arch.lifecycle:extensions:$lifeCycleVersion"
 
+    /**
+     * multiDex
+     */
     implementation 'com.android.support:multidex:1.0.3'
 
+    /**
+     * UI, Font and CustomView
+     */
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
     implementation 'com.github.deano2390:FlowTextView:2.0.5'
     implementation 'com.google.android:flexbox:0.3.2'
 
 
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 }

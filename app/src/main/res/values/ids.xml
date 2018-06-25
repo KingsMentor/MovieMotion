@@ -44,4 +44,5 @@
     <item name="trailers" type="id" />
     <item name="trailer_loading_indicator" type="id" />
     <item name="toolbar_title_view" type="id" />
+    <item name="trailersFlowLayout" type="id" />
 </resources>
