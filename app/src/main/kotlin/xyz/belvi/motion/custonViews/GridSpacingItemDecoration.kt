@@ -5,7 +5,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 
 /**
- * Created by zone2 on 6/25/18.
+ *
+ *
+ * Created by Nosa Belvi on 6/25/18.
+ *
+ * special decoration for gridview implementation
+ *
+ *
  */
 class GridSpacingItemDecoration(private val spanCount: Int, private val spacing: Int, private val includeEdge: Boolean) : RecyclerView.ItemDecoration() {
 

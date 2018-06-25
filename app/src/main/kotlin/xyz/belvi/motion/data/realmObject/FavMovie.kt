@@ -6,7 +6,10 @@ import xyz.belvi.motion.constants.IMG_PATH
 import xyz.belvi.motion.models.enums.MoviePosterSize
 
 /**
- * Created by zone2 on 6/23/18.
+ * Created by Nosa Belvi on 6/23/18.
+ *
+ * FavMovie is a @RealmObject that keeps track of all favorite movies
+ * It implements @MotionMovie - which provides base attrs for all Movie implementation
  */
 open class FavMovie(
         @PrimaryKey

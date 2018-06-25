@@ -6,20 +6,28 @@ import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 
 /**
- * Created by zone2 on 6/25/18.
+ * Created by Nosa Belvi on 6/25/18.
+ *
+ *
+ * An enchanced version of Recyclerview tailored
+ * specifically to for grid and to listen to when a
+ * user scrolls to the end of the list
+ *
+ *
+ *
  */
 class EnhanceGridRecyclerView : RecyclerView {
 
     private var mLayoutManager: GridLayoutManager? = null
     private var mAdapter: RecyclerView.Adapter<*>? = null
 
-    private var scrollCallback: listenToScroll? = null
+    private var scrollCallback: ScrollEndListener? = null
 
-    constructor(context: Context) : super(context) {}
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {}
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {}
+    constructor(context: Context, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle)
 
     override fun setLayoutManager(layout: RecyclerView.LayoutManager) {
         super.setLayoutManager(layout)
@@ -33,19 +41,21 @@ class EnhanceGridRecyclerView : RecyclerView {
 
     override fun onScrolled(dx: Int, dy: Int) {
         super.onScrolled(dx, dy)
-        if (mAdapter != null)
-            if (mLayoutManager!!.findLastCompletelyVisibleItemPosition() == mAdapter!!.itemCount - THRESHOLD) {
+        mAdapter?.let {
+            if (mLayoutManager?.findLastCompletelyVisibleItemPosition() == it.itemCount - THRESHOLD) {
                 if (scrollCallback != null)
-                    scrollCallback!!.reachedEndOfList()
+                    scrollCallback?.hasReachedEndOfList()
             }
+        }
+
     }
 
-    fun listen(sc: listenToScroll) {
+    fun listen(sc: ScrollEndListener) {
         scrollCallback = sc
     }
 
-    interface listenToScroll {
-        fun reachedEndOfList()
+    interface ScrollEndListener {
+        fun hasReachedEndOfList()
     }
 
     companion object {

@@ -8,6 +8,7 @@
         fontPath="fonts/source_code_light.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/trailer_margin"
         android:layout_marginLeft="@dimen/trailer_margin"
         android:layout_marginStart="@dimen/trailer_margin"
         android:layout_marginTop="@dimen/trailer_margin"

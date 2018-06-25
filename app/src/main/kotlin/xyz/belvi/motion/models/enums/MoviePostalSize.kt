@@ -1,7 +1,9 @@
 package xyz.belvi.motion.models.enums
 
 /**
- * Created by zone2 on 6/23/18.
+ * Created by Nosa Belvi on 6/23/18.
+ * @MoviePosterSize enumerates all possble image preview size
+ *
  */
 enum class MoviePosterSize(val size: Int) {
     w92(92),

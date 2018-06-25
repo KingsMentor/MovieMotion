@@ -8,7 +8,12 @@ import xyz.belvi.motion.constants.IMG_PATH
 import xyz.belvi.motion.models.enums.MoviePosterSize
 
 /**
- * Created by zone2 on 6/23/18.
+ * Created by Nosa Belvi on 6/23/18.
+ *
+ * Movie is a @RealmObject that saves movies retrieved from api.
+ * it's identified by a unique.
+ * This class also implements @Parcelable so it can be passed as an extra via Intent or a bundle.
+ *
  */
 open class Movie(
         @PrimaryKey

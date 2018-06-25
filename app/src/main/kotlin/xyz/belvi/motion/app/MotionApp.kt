@@ -9,11 +9,22 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 import xyz.belvi.motion.R
 
 /**
- * Created by zone2 on 6/23/18.
+ *
+ * Created by Nosa Belvi on 6/23/18.
+ *
+ * MotionApp extends the application class
+ * for initialisation of few functionality needed for proper
+ * functioning of the app
+ *
+ * Realm - Database
+ * Calligraphy - App Font
+ * MultiDex - handles exceeding of 64k methods
+ *
  */
 open class MotionApp : Application() {
 
 
+    // singleton. provides application context access to classes without context.
     companion object {
         var instance: MotionApp? = null
 
@@ -28,12 +39,14 @@ open class MotionApp : Application() {
         }
     }
 
+    // initialise realm
     private fun realmInit() {
         Realm.init(this)
         val config = RealmConfiguration.Builder().name(getString(R.string.realm_db_name)).build()
         Realm.setDefaultConfiguration(config)
     }
 
+    // initialise calligraphy
     private fun defineCalligraphy() {
         CalligraphyConfig.initDefault(CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/source_code.ttf")
@@ -42,6 +55,7 @@ open class MotionApp : Application() {
         )
     }
 
+    // set up multiDex
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)

@@ -3,12 +3,9 @@ package xyz.belvi.motion.movieMain
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.util.Pair
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.GridLayoutManager
@@ -30,13 +27,12 @@ import xyz.belvi.motion.movieMain.adapter.MovieListAdapter
 import xyz.belvi.motion.movieMain.presenter.MoviesFetchPresenter
 import xyz.belvi.motion.movieMain.viewModel.MoviesVM
 import xyz.belvi.motion.models.enums.findByResID
-import xyz.belvi.motion.movieDetails.MovieDetailedActivity
 import xyz.belvi.motion.preferences.getFilterType
 import xyz.belvi.motion.preferences.setFilterType
 import xyz.belvi.motion.search.SearchActivity
 import xyz.belvi.motion.utils.showMovieDetails
 
-class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll, MoviesFetchPresenter {
+class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.ScrollEndListener, MoviesFetchPresenter {
 
 
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
@@ -113,7 +109,7 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
     }
 
 
-    override fun reachedEndOfList() {
+    override fun hasReachedEndOfList() {
         moviesVM.requestNextPage(getFilterType())
     }
 

@@ -6,7 +6,13 @@ import xyz.belvi.motion.constants.IMG_PATH
 import xyz.belvi.motion.models.enums.MoviePosterSize
 
 /**
- * Created by zone2 on 6/23/18.
+ * Created by Nosa Belvi on 6/23/18.
+ *
+ * @xyz.belvi.motion.data.realmObject.PopularMovie is a realm object that saves list of all views popular movies during an app session.
+ * This list is made available and  refresh on new launch of the app.
+ * it impements @MotionMovie - which provides base attrs for all @Movie implementation
+ *
+ *
  */
 open class PopularMovie(
         @PrimaryKey

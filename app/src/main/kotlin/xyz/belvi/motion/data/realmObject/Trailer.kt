@@ -4,7 +4,11 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
 /**
- * Created by zone2 on 6/24/18.
+ * Created by Nosa Belvi on 6/24/18.
+ *
+ * @Trailer is a @RealmObject that keeps track of all trailers belonging to a movie
+ * @movieId helps map a trailer to a particular movie.
+ *
  */
 open class Trailer(
         @PrimaryKey

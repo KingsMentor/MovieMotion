@@ -4,7 +4,9 @@ import android.support.annotation.IdRes
 import xyz.belvi.motion.R
 
 /**
- * Created by zone2 on 6/23/18.
+ * Created by Nosa Belvi on 6/23/18.
+ *
+ * @MovieFilter enumerates filter options for viewing movies
  */
 enum class MovieFilter(val friendlyName: String, val path: String, @IdRes val id: Int) {
     POPULAR("Popular", "popular", R.id.action_filter_popular),
@@ -13,6 +15,10 @@ enum class MovieFilter(val friendlyName: String, val path: String, @IdRes val id
 
 }
 
+//
+/**this is to find a movie filter by id.
+ * @resId is a menuitem id.
+ */
 fun findByResID(@IdRes resId: Int): MovieFilter {
     MovieFilter.values().forEach {
         if (it.id == resId)

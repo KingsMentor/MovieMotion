@@ -7,6 +7,11 @@ import xyz.belvi.motion.models.enums.MoviePosterSize
 
 /**
  * Created by zone2 on 6/23/18.
+ *
+ * @xyz.belvi.motion.data.realmObject.TopRatedMovie is a realm object that saves list of all views popular movies during an app session.
+ * This list is made available and  refresh on new launch of the app.
+ * it implements @MotionMovie - which provides base attrs for all @Movie implementation
+ *
  */
 open class TopRatedMovie(
         @PrimaryKey

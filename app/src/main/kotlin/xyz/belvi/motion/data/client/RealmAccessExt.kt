@@ -15,9 +15,17 @@ import xyz.belvi.motion.movieDetails.viewModel.TrailersVM
 import xyz.belvi.motion.preferences.AppCache
 
 /**
- * Created by zone2 on 6/23/18.
+ * Created by Nosa Belvi on 6/23/18.
+ *
+ * extensible functions to perform CRUD operations on
+ * realm data objects.
+ * These are extensions on viewModels to as to restrict access
+ * to only viewmodels
+ *
+ *
  */
 
+// insert or update list of realm objects which can be FAvMovie or PopularMovie or TopRatedMovie
 inline fun <reified T : RealmModel> ViewModel.update(realmItems: MutableList<T>) {
     val realm = Realm.getDefaultInstance()
     realm.beginTransaction()
@@ -26,10 +34,14 @@ inline fun <reified T : RealmModel> ViewModel.update(realmItems: MutableList<T>)
     realm.close()
 }
 
+
+
+// fetch from realm database
 inline fun <reified T : RealmModel> ViewModel.fetch(): RealmResults<T>? {
     return Realm.getDefaultInstance().where(T::class.java)?.findAll()
 }
 
+// clear realm model
 inline fun <reified T : RealmModel> ViewModel.clear() {
     val realm = Realm.getDefaultInstance()
     realm.beginTransaction()
@@ -39,18 +51,17 @@ inline fun <reified T : RealmModel> ViewModel.clear() {
 
 }
 
+// check a realm model if it is empty
 inline fun <reified T : RealmModel> ViewModel.isRealmListEmpty(): Boolean {
     return Realm.getDefaultInstance().where(T::class.java)?.findAll()?.let { it.size == 0 } ?: kotlin.run { true }
 }
 
-inline fun <reified T : RealmModel> MovieDetailsVM.findMovieById(movieID: Int): T? {
-    return Realm.getDefaultInstance().where(T::class.java)?.equalTo("id", movieID)?.findFirst()
-}
-
+// check if movie has been added to favorite list by id
 fun MovieDetailsVM.isFavMovie(movieID: Int): Boolean {
     return Realm.getDefaultInstance().where(FavMovie::class.java)?.equalTo("id", movieID)?.findFirst()?.let { true } ?: kotlin.run { false }
 }
 
+// add or remove a move to or from favorite list
 fun MovieDetailsVM.addOrRemoveFavMovie(favMovie: FavMovie, state: Boolean) {
     val realm = Realm.getDefaultInstance()
     realm.beginTransaction()
@@ -62,6 +73,7 @@ fun MovieDetailsVM.addOrRemoveFavMovie(favMovie: FavMovie, state: Boolean) {
     realm.close()
 }
 
+// fetch trailer by movie id.
 fun TrailersVM.fetchById(movieId: Int): RealmResults<Trailer>? {
     return Realm.getDefaultInstance().where(Trailer::class.java)?.equalTo("movieId", movieId)?.findAll()
 }
