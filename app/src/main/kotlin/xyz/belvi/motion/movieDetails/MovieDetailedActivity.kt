@@ -23,6 +23,14 @@ import xyz.belvi.motion.movieDetails.trailers.TrailersFragment
 import xyz.belvi.motion.movieDetails.viewModel.MovieDetailsVM
 import xyz.belvi.motion.preferences.getFilterType
 
+
+/**
+ * Created by Belvi on 6/24/18.
+ *
+ * @MovieDetailedActivity is a detailed activity for selected movie
+ *
+ */
+
 class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
 
 
@@ -35,8 +43,10 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
     var favItem: MenuItem? = null
     private lateinit var movieDetailsVM: MovieDetailsVM
 
+    // get movied  passed via intent. This is optional because it can be null
     private fun movie(): Movie? = intent.getParcelableExtra(MOVIE_KEY)
 
+    // custom interaction of toolbar scr
     private fun initCustomTitleInteraction() {
         layout_title.post({
             val layoutParams = toolbar.layoutParams as CollapsingToolbarLayout.LayoutParams
@@ -46,15 +56,20 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
 
         app_bar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
 
+            // to get an adequate midpoint for the custom title
             val mid = (toolbar_layout.width / 2) - (movie_title.width / 2)
             val point = (Math.abs(verticalOffset) * mid) / appBarLayout.totalScrollRange
+            // scale font so it reduces as the user scrolls the page upwards. Range is from 0 to 14.
             val font = (Math.abs(verticalOffset) * 14) / appBarLayout.totalScrollRange
 
+            // adjust the x position of the movie_title in the toolbar
             movie_title.x = point.toFloat()
+            // apply scale font to movie_title
             movie_title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 32f - font)
         }
     }
 
+    // update views with data from movie object
     private fun presentDetails(movie: Movie) {
         val stubMovie = FavMovie(movie.id, movie)
         Glide.with(this).load(stubMovie.getMoviePosterPath(MoviePosterSize.w500)).into(img_postal)
@@ -77,15 +92,19 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
         setContentView(R.layout.activity_movie_detailed)
         setSupportActionBar(toolbar)
         initCustomTitleInteraction()
+        // apply chanhes to supportActionBar
         supportActionBar?.apply {
             title = ""
             setHomeButtonEnabled(true)
             setDisplayHomeAsUpEnabled(true)
         }
 
+        // initialise livedata viewModel
         movieDetailsVM = ViewModelProviders.of(this).get(MovieDetailsVM::class.java)
+        // onlt bind to viewModel if movie is available (not null)
         movie()?.let {
             movieDetailsVM.bind(this@MovieDetailedActivity)
+            // initiate a fragment trasaction for trailers , passing the movie id as a params,
             supportFragmentManager.beginTransaction()
                     .replace(R.id.trailers_and_reviews, TrailersFragment().newInstance(it.id))
                     .commitAllowingStateLoss()
@@ -96,11 +115,13 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home)
+        if (item.itemId == android.R.id.home) {
+            // go back to MainActivity
             onBackPressed()
-        else {
+        } else {
             item.isChecked = !item.isChecked
             movie()?.let {
+                // add to favorite if checked or remove from favorite if not checked.
                 movieDetailsVM.addToFavoriteList(FavMovie(it.id, it), item.isChecked)
             }
 
@@ -111,6 +132,7 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_movie_detailed_activty, menu)
         favItem = menu.findItem(R.id.action_fav)
+        // only show fav menu item if movie is not of type FavoriteMovie
         favItem?.isVisible = getFilterType() != MovieFilter.FAVORITE
         movie()?.let {
             movieDetailsVM.updateCheck(it.id)
@@ -119,13 +141,16 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
     }
 
 
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
-    }
-
     override fun markFavorite(isFav: Boolean): MovieDetailsPresenter {
+        // update favItem (menuItem) UI
         favItem?.setIcon(if (isFav) R.drawable.ic_star_white_selected else R.drawable.ic_star_white_24dp)
         return this
+    }
+
+
+    // render all font with calligraphy default app font set in MotionApp
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
 

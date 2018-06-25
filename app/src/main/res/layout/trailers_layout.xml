@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.flexbox.FlexboxLayout
-        android:id="@id/trailers"
+        android:id="@id/trailersFlowLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="false"

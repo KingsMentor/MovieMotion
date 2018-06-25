@@ -19,7 +19,10 @@ import xyz.belvi.motion.movieDetails.presenter.TrailerPresenter
 import xyz.belvi.motion.movieDetails.viewModel.TrailersVM
 
 /**
- * Created by zone2 on 6/24/18.
+ * Created by Belvi on 6/24/18.
+ *
+ * @TrailersFragment handles items of trailers views
+ *
  */
 class TrailersFragment : Fragment(), TrailerPresenter {
 
@@ -27,6 +30,7 @@ class TrailersFragment : Fragment(), TrailerPresenter {
     private lateinit var trailersVM: TrailersVM
 
 
+    // for starting this fragment with a movie id
     fun newInstance(movieId: Int): TrailersFragment {
         val bundle = Bundle()
         bundle.putInt(MOVIE_KEY, movieId)
@@ -34,6 +38,7 @@ class TrailersFragment : Fragment(), TrailerPresenter {
         return this
     }
 
+    // get movied id passed via bundle arguments. This is optional because it can be null
     fun getMovieId(): Int? {
         return arguments?.getInt(MOVIE_KEY)
 
@@ -47,23 +52,30 @@ class TrailersFragment : Fragment(), TrailerPresenter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         trailersVM = ViewModelProviders.of(this).get(TrailersVM::class.java)
+
+        // only  bind with viewModel if movieId is not null
         getMovieId()?.let { id ->
+            // bind presenter with viewModel and lister to datachanges from live data implementation in view model
             trailersVM.bind(this, id).observeForever { result ->
-                trailers?.let {
-                    trailers.removeAllViews()
+                trailersFlowLayout?.let {
+                    // clear all views from flow layout if any exist
+                    trailersFlowLayout.removeAllViews()
                     result?.forEach {
+                        // for each item in new trailer, create a new view and add to flow layout
                         trailer_loading_indicator.visibility = View.GONE
-                        trailers.addView(getTrailerView(it))
+                        trailersFlowLayout.addView(getTrailerView(it))
                     }
                 }
 
             }
+            // add click listener to retry view displayed when fetching tailers fails.
             RxView.clicks(retry_view).subscribe {
                 trailersVM.retry(id)
             }
         }
     }
 
+    // inflate , add listerner and  return a  trailer view
     private fun getTrailerView(trailer: Trailer): View {
         val view = LayoutInflater.from(context).inflate(R.layout.trailer_item, null, false)
         val trailerAppCompatTextView = view.findViewById(R.id.trailer_txt_view) as AppCompatTextView

@@ -7,6 +7,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 import xyz.belvi.motion.R
+import xyz.belvi.motion.constants.DEFAULT_APP_FONT
 
 /**
  *
@@ -49,7 +50,7 @@ open class MotionApp : Application() {
     // initialise calligraphy
     private fun defineCalligraphy() {
         CalligraphyConfig.initDefault(CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/source_code.ttf")
+                .setDefaultFontPath(DEFAULT_APP_FONT)
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         )

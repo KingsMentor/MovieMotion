@@ -16,54 +16,77 @@ import xyz.belvi.motion.network.client.ApiClient
 import xyz.belvi.motion.utils.apiKey
 
 /**
- * Created by zone2 on 6/24/18.
+ * Created by Nosa Belvi on 6/24/18.
+ *
+ *  @MovieDetailsVM is a livedata viewmModel for TrailersFragment
+ *
  */
 class TrailersVM : ViewModel() {
 
     private var mPresenter: TrailerPresenter? = null
+    // disposal bag to handle memory leaks with subscriptions on rx
     val rxDisposal = CompositeDisposable()
 
+
+    // initialise livedata for MutableList<Trailer>
     private var liveMovies: MutableLiveData<MutableList<Trailer>> = MutableLiveData()
 
+    // bind viewModel with TrailersFragment
     fun bind(presenter: TrailerPresenter, movieId: Int): LiveData<MutableList<Trailer>> {
         mPresenter = presenter
         loadTrailers(movieId)
         return liveMovies
     }
 
+    // handle retry for failed scenerio
     fun retry(movieId: Int) {
         loadTrailers(movieId)
     }
 
+    /** handles loading of trailers. First, we load from database (if any entry exist). Then, we procedd to
+     * make an api call to update local database
+     */
     private fun loadTrailers(movieId: Int) {
         mPresenter?.startLoading(isRealmListEmpty<Trailer>())
         rxDisposal.clear()
         rxDisposal.add(
+                // fetch and listen to changes on this realm object query
                 fetchById(movieId)?.asFlowable()?.subscribe {
                     liveMovies.value = it
                 }!!
-        )
+        ) // add this subscription to a dispose bad to avoid memory leaks
         fetchTrailers(movieId)
     }
 
+    // handles fecthing from api using retrofit
     private fun fetchTrailers(movieId: Int) {
+        // proceed with this call if and only if apiKey was retrieved
         apiKey()?.let {
+            // initiate a network call the with retrofit
             ApiClient.apiClient.create(ApiInterface::class.java).fetchTrailers(movieId, it)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io()) // perform the network call on an io thread
+                    .observeOn(AndroidSchedulers.mainThread()) // return response on Android mainThread
                     .doOnError {
+                        // notify for error
                         mPresenter?.onTrailerRetrieveFailed(isRealmListEmpty<Trailer>())
                     }
-                    .onErrorResumeNext(io.reactivex.Observable.empty())
+                    .onErrorResumeNext(io.reactivex.Observable.empty()) // handles expeception that might lead to app crash
                     .subscribe {
+                        // update trailers databse
                         it.results.forEach {
                             it.movieId = movieId
                         }
                         update(it.results)
+                        // notify completion of tailers fetch.
                         mPresenter?.onLoadCompleted(it.results.size == 0)
                     }
 
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        rxDisposal.clear()
     }
 
 

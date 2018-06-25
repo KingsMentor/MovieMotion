@@ -1,9 +1,7 @@
 package xyz.belvi.motion.search.presenter
 
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import xyz.belvi.motion.data.realmObject.MotionMovie
-import xyz.belvi.motion.models.SearchResult
 import xyz.belvi.motion.movieMain.presenter.MoviesFetchPresenter
 
 /**
