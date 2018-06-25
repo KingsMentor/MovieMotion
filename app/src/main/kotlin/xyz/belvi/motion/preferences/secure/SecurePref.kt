@@ -12,7 +12,7 @@ import java.security.GeneralSecurityException
 /**
  * Created by zone2 on 12/24/17.
  */
-open class SecurePref(context: Context?, className: String) : SecurePreferences(context, secretKey(SecureUtils().getDbKey(context!!), SecureUtils().getHashKey(context)), context.packageName + "." + className + ".xml") {
+open class SecurePref(context: Context?, className: String) : SecurePreferences(context, secretKey(SecureUtils().getDbKey(context), SecureUtils().getHashKey(context)), context?.packageName + "." + className + ".xml") {
 
     private val mContext: Context? = context
 
@@ -21,13 +21,13 @@ open class SecurePref(context: Context?, className: String) : SecurePreferences(
         private var MNO: AesCbcWithIntegrity.SecretKeys? = null
 
         private fun secretKey(key: String, dbKey: String): AesCbcWithIntegrity.SecretKeys? {
-            try {
+            return try {
                 if (MNO == null)
                     MNO = AesCbcWithIntegrity.generateKeyFromPassword(key, dbKey.toByteArray(), 2)
-                return MNO
+                MNO
             } catch (e: GeneralSecurityException) {
                 e.printStackTrace()
-                return null
+                null
             }
 
         }

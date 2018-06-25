@@ -4,6 +4,7 @@ import com.google.gson.JsonElement
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import xyz.belvi.motion.models.retroResponse.SearchResponse
 import xyz.belvi.motion.models.retroResponse.TrailerResponse
 
 /**
@@ -11,10 +12,13 @@ import xyz.belvi.motion.models.retroResponse.TrailerResponse
  */
 interface ApiInterface {
 
-    @GET("{path}")
+    @GET("movie/{path}")
     fun fetchMovies(@Path("path") sortType: String, @Query("api_key") apiKey: String, @Query("page") page: Int): io.reactivex.Observable<JsonElement>
 
-    @GET("{id}/videos")
+    @GET("movie/{id}/videos")
     fun fetchTrailers(@Path("id") movieId: Int, @Query("api_key") apiKey: String): io.reactivex.Observable<TrailerResponse>
+
+    @GET("search/company")
+    fun search(@Query("query") query: String, @Query("api_key") apiKey: String, @Query("page") page: Int): io.reactivex.Observable<SearchResponse>
 
 }

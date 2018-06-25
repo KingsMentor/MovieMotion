@@ -15,6 +15,7 @@
     <string name="title_txt">Motion - %s</string>
 
     <string name="trailers">Trailers</string>
+    <string name="search_hint">Search Movie</string>
 
     <string name="review_author">Review By</string>
     <string name="review_content">Author\'s Review</string>
@@ -29,5 +30,6 @@
     <string name="trailers_load_failed">failed to load trailers</string>
 
     <string name="play_trailer">play trailer</string>
+    <string name="search">Search</string>
 
 </resources>

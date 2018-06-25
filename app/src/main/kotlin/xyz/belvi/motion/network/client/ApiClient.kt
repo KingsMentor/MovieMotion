@@ -16,7 +16,7 @@ class ApiClient {
 
     companion object {
         private var retrofit: Retrofit? = null
-        private val API_BASE_URL: String = "http://api.themoviedb.org/3/movie/"
+        private val API_BASE_URL: String = "http://api.themoviedb.org/3/"
 
         val apiClient: Retrofit
             get() {

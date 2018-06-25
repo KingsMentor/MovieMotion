@@ -14,6 +14,7 @@
     <item name="empty_view" type="id" />
     <item name="nav_view" type="id" />
     <item name="action_filter" type="id" />
+    <item name="action_search" type="id" />
     <item name="action_fav" type="id" />
     <item name="action_review" type="id" />
     <item name="action_filter_favorite" type="id" />

@@ -33,6 +33,7 @@ import xyz.belvi.motion.models.enums.findByResID
 import xyz.belvi.motion.movieDetails.MovieDetailedActivity
 import xyz.belvi.motion.preferences.getFilterType
 import xyz.belvi.motion.preferences.setFilterType
+import xyz.belvi.motion.search.SearchActivity
 
 class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll, MoviesFetchPresenter {
 
@@ -100,7 +101,13 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.listenToScroll
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        drawer_layout.openDrawer(Gravity.END)
+        item?.let {
+            if (item.itemId == R.id.action_filter)
+                drawer_layout.openDrawer(Gravity.END)
+            else
+                startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+        }
+
         return super.onOptionsItemSelected(item)
     }
 
