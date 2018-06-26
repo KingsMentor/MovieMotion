@@ -21,6 +21,7 @@ import xyz.belvi.motion.models.enums.MoviePosterSize
 import xyz.belvi.motion.movieDetails.presenter.MovieDetailsPresenter
 import xyz.belvi.motion.movieDetails.trailers.TrailersFragment
 import xyz.belvi.motion.movieDetails.viewModel.MovieDetailsVM
+import xyz.belvi.motion.notification.NotificationUtils
 import xyz.belvi.motion.preferences.getFilterType
 
 
@@ -144,6 +145,9 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
     override fun markFavorite(isFav: Boolean): MovieDetailsPresenter {
         // update favItem (menuItem) UI
         favItem?.setIcon(if (isFav) R.drawable.ic_star_white_selected else R.drawable.ic_star_white_24dp)
+        if (isFav) {
+            NotificationUtils.notify(movie()?.original_title + " added to favorite", this)
+        }
         return this
     }
 

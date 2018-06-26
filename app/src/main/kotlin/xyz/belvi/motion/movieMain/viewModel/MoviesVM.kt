@@ -39,6 +39,7 @@ open class MoviesVM() : ViewModel() {
         resetPageCounter()
         this.presenter = presenter
         this.filter = filter
+        loadMovies()
         return liveMovies
     }
 
