@@ -124,6 +124,8 @@ open class MoviesVM() : ViewModel() {
                             else
                                 update(it.results.toPopularMovies())
                             this.presenter.onLoadCompleted(it.results.size == 0)
+                        } ?: kotlin.run {
+                            this.presenter.onLoadFailure(isRealmListEmpty<D>())
                         }
                     }
         } ?: kotlin.run {

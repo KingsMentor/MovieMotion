@@ -147,8 +147,9 @@ class MainActivity : MovieActivity(), EnhanceGridRecyclerView.ScrollEndListener,
     override fun onLoadFailure(emptyDataSet: Boolean) {
         if (emptyDataSet) {
             failed_view.visibility = View.VISIBLE
-            loading_items.visibility = View.GONE
         }
+        loading_items.visibility = View.GONE
+        loading_view_indicator.visibility = View.GONE
     }
 
     // clear adapter when preference is changed
