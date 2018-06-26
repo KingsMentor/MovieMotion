@@ -2,11 +2,7 @@ package xyz.belvi.motion.search
 
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.util.Pair
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.MenuItem
@@ -20,22 +16,21 @@ import kotlinx.android.synthetic.main.search_recycler_view.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import xyz.belvi.motion.R
 import xyz.belvi.motion.data.realmObject.MotionMovie
-import xyz.belvi.motion.movieDetails.MovieDetailedActivity
 import xyz.belvi.motion.movieMain.adapter.MovieListAdapter
 import xyz.belvi.motion.search.presenter.SearchResultPresenter
 import xyz.belvi.motion.search.viewModel.SearchVM
-import xyz.belvi.motion.utils.showMovieDetails
-
+import xyz.belvi.motion.sharedScreens.MovieActivity
+import xyz.belvi.motion.utils.calculateNoOfColumns
 /**
  * Created by Nosa Belvi on 6/23/18.
  *
- * @SearchActivity houses searh implemenration of the app.
+ * @SearchActivity houses search implementation of the app.
  * ViewModel - @SearchVM
  * Presenter - SearchResultPresenter - an extension of @MovieDetailsPresenter
  *
  */
 
-class SearchActivity : AppCompatActivity(), SearchResultPresenter {
+class SearchActivity : MovieActivity(), SearchResultPresenter {
 
     private lateinit var searchVM: SearchVM
 
@@ -52,7 +47,7 @@ class SearchActivity : AppCompatActivity(), SearchResultPresenter {
 
         // hous keeping for recyclerview
         search_recycler.apply {
-            layoutManager = GridLayoutManager(this@SearchActivity, 2)
+            layoutManager = GridLayoutManager(this@SearchActivity, this.context.calculateNoOfColumns())
             setHasFixedSize(false)
             adapter = MovieListAdapter(arrayListOf(), this@SearchActivity)
         }

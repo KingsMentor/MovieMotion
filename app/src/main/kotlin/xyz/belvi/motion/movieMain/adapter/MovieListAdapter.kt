@@ -12,7 +12,10 @@ import xyz.belvi.motion.movieMain.presenter.MoviesFetchPresenter
 import xyz.belvi.motion.models.enums.MoviePosterSize
 
 /**
- * Created by zone2 on 6/23/18.
+ * Created by Nosa Belvi on 6/23/18.
+ * @MovieListAdapter hanldes adapter for @MainActivity and @SearchActivity recyclerView.
+ * @movies is contains a list of items which can be updated via @updateItems
+ * @moviePresenter helps initiate callback when @holder.itemView is clicked
  */
 class MovieListAdapter(private var movies: MutableList<MotionMovie>, private val moviePresenter: MoviesFetchPresenter) : RecyclerView.Adapter<MovieListAdapter.MovieHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieHolder {
@@ -20,7 +23,10 @@ class MovieListAdapter(private var movies: MutableList<MotionMovie>, private val
     }
 
     override fun onBindViewHolder(holder: MovieHolder, position: Int) {
+        // bind each item and pass movies params containing the data to display
         holder.bindItem(movies[position])
+
+        // add listener to each item
         holder.itemView.setOnClickListener {
             moviePresenter.movieSelected(it, movies[position])
         }

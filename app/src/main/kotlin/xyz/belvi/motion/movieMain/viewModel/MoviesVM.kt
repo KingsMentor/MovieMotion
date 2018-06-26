@@ -23,7 +23,10 @@ import xyz.belvi.motion.utils.*
 
 
 /**
- * Created by zone2 on 6/23/18.
+ * Created by Nosa Belvi on 6/23/18.
+ * @MoviesVM is a lifeCycle @ViewModel implementation for @MainActivity
+ * @presenter binds MainActivity with MoviesVM
+ * @rxDisposal handles dispose of subscription to avoid memory leaks
  */
 class MoviesVM : ViewModel() {
 
@@ -33,24 +36,28 @@ class MoviesVM : ViewModel() {
 
 
     fun bind(presenter: MoviesFetchPresenter, filter: MovieFilter): LiveData<MutableList<MotionMovie>> {
+        // reset page count for new bind so data will start loadinf afresh
         resetPageCounter()
         this.presenter = presenter
         loadMoviesByFilter(filter)
         return liveMovies;
     }
 
+    // handles request for a next page
     fun requestNextPage(filter: MovieFilter) {
-        filter.updatePageCounter()
-
-        if (filter == MovieFilter.POPULAR) {
+        filter.updatePageCounter() // increment page counter
+        if (filter != MovieFilter.FAVORITE) {
+            // new page is  not requested for favorite item. Favorite items is fetched from db
             this.presenter?.onLoadStarted(false)
-            fetchMoviesFromApi<PopularMovie>(filter)
-        } else if (filter == MovieFilter.TOP_RATED) {
-            this.presenter?.onLoadStarted(false)
-            fetchMoviesFromApi<TopRatedMovie>(filter)
+            if (filter == MovieFilter.POPULAR) {
+                fetchMoviesFromApi<PopularMovie>(filter)
+            } else if (filter == MovieFilter.TOP_RATED) {
+                fetchMoviesFromApi<TopRatedMovie>(filter)
+            }
         }
     }
 
+    // update items  whenever preference is changed
     fun switchFilter(movieFilter: MovieFilter) {
         this.presenter?.clearAdapter()
         loadMoviesByFilter(movieFilter)
@@ -77,6 +84,7 @@ class MoviesVM : ViewModel() {
         }
     }
 
+    // fetch from realm and observe. Multiple obersavation is not allowed because the user can only see one list at a time
     private inline fun <reified T : RealmModel> switchRealmObserver() {
         rxDisposal.clear()
         rxDisposal.add(
@@ -90,7 +98,9 @@ class MoviesVM : ViewModel() {
         )
     }
 
+    // this function is generic so it can handle as many instance of realModel we have
     private inline fun <reified D : RealmModel> fetchMoviesFromApi(filter: MovieFilter) {
+        // only make this api call when apiKey is available
         apiKey()?.let { apiKey ->
             apiClient.create(ApiInterface::class.java).fetchMovies(filter.path, apiKey, filter.currentPage())
                     .subscribeOn(Schedulers.io())
@@ -101,8 +111,10 @@ class MoviesVM : ViewModel() {
                     .onErrorResumeNext(io.reactivex.Observable.empty())
                     .subscribe {
                         it?.let {
+                            // clear existing data if current page is 1
                             if (filter.currentPage() == 1)
                                 clear<D>()
+                            // convert result accordingly and update realm. Observable on realm will notify livedata of update, thereby notifying on MainActivity observer.
                             if (filter == MovieFilter.TOP_RATED)
                                 update(it.results.toTopRatedMovies())
                             else
@@ -111,10 +123,12 @@ class MoviesVM : ViewModel() {
                         }
                     }
         } ?: kotlin.run {
+            // notify failure
             this.presenter?.onLoadFailure(isRealmListEmpty<D>())
         }
     }
 
+    // clear dispose bag when view model is cleared
     override fun onCleared() {
         super.onCleared()
         rxDisposal.clear()

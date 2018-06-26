@@ -17,6 +17,7 @@ import xyz.belvi.motion.models.enums.MovieFilter
 import xyz.belvi.motion.movieDetails.MovieDetailedActivity
 import xyz.belvi.motion.preferences.AppCache
 
+
 /**
  * Created by Nosa Belvi on 6/24/18.
  *
@@ -64,28 +65,17 @@ fun MutableList<Movie>.toTopRatedMovies(): MutableList<TopRatedMovie> {
     return topRated
 }
 
-/**
- * start MovieDetailsActivity. This is an extension to AppCompatActivity
- * because both MainActivity and Search Activity calls same function.
- * To avoid duplication of code, this approach was used.
- *
- */
-fun AppCompatActivity.showMovieDetails(view: View, movie: MotionMovie) {
-    val p1 = Pair.create(view, getString(R.string.postal_transition_name))
-    val optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, p1)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-        startActivity(Intent(this, MovieDetailedActivity::class.java)
-                .putExtra(MovieDetailedActivity.MOVIE_KEY, movie.getMovieItem()), optionsCompat.toBundle())
-    } else {
-        startActivity(Intent(this, MovieDetailedActivity::class.java)
-                .putExtra(MovieDetailedActivity.MOVIE_KEY, movie.getMovieItem()))
-    }
 
-
-}
 
 // only display log on debug mode
 fun Context.motionError(tag: String, message: String?) {
     if (BuildConfig.DEBUG)
         Log.e(tag, message)
+}
+
+// calculate number of columns that can fit into the screen
+fun Context.calculateNoOfColumns(): Int {
+    val displayMetrics = this.resources.displayMetrics
+    val dpWidth = displayMetrics.widthPixels / displayMetrics.density
+    return (dpWidth / 180).toInt()
 }

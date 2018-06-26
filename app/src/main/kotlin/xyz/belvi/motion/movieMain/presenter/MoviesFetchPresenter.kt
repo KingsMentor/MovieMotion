@@ -4,7 +4,9 @@ import android.view.View
 import xyz.belvi.motion.data.realmObject.MotionMovie
 
 /**
- * Created by zone2 on 6/23/18.
+ * Created by Nosa Belvi on 6/23/18.
+ *
+ * @MoviesFetchPresenter abstract allowabled implementation for mainActivity from @MoviesVM
  */
 interface MoviesFetchPresenter {
     fun onLoadFailure(emptyDataSet: Boolean)

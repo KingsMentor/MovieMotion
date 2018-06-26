@@ -30,23 +30,25 @@ import xyz.belvi.motion.models.enums.findByResID
 import xyz.belvi.motion.preferences.getFilterType
 import xyz.belvi.motion.preferences.setFilterType
 import xyz.belvi.motion.search.SearchActivity
-import xyz.belvi.motion.utils.showMovieDetails
+import xyz.belvi.motion.sharedScreens.MovieActivity
+import xyz.belvi.motion.utils.calculateNoOfColumns
 
 /**
  * Created by Nosa Belvi on 6/23/18.
  *
- * @SearchActivity houses searh implemenration of the app.
- * ViewModel - @SearchVM
- * Presenter - SearchResultPresenter - an extension of @MovieDetailsPresenter
+ * @MainActivity houses the launcher activity of the app.
+ * ViewModel - @MoviesVM
+ * Presenter - MoviesFetchPresenter
  *
  */
 
-class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.ScrollEndListener, MoviesFetchPresenter {
+class MainActivity : MovieActivity(), EnhanceGridRecyclerView.ScrollEndListener, MoviesFetchPresenter {
 
 
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var moviesVM: MoviesVM
 
+    // set up side nav and checked user last selected preference in menu
     private fun initSideNav() {
         setSupportActionBar(toolbar)
         // set a custom shadow that overlays the main content when the drawer opens
@@ -79,15 +81,18 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.ScrollEndListe
         setContentView(R.layout.activity_main)
         initSideNav()
 
+        // apply ui setup to recyclerView
         movies?.apply {
-            listen(this@MainActivity)
-            layoutManager = GridLayoutManager(this@MainActivity, 2)
+            listen(this@MainActivity) // set up listener for end of scroll
+            layoutManager = GridLayoutManager(this@MainActivity, this.context.calculateNoOfColumns())
             addItemDecoration(GridSpacingItemDecoration(2, 0, false))
             setHasFixedSize(false)
             adapter = MovieListAdapter(arrayListOf(), this@MainActivity)
         }
+        // initialise viewmModel
         moviesVM = ViewModelProviders.of(this).get(MoviesVM::class.java)
 
+        // bind to viewModel and listen to changes in liveData
         moviesVM.bind(this@MainActivity, getFilterType()).observeForever {
             it?.let {
                 (movies.adapter as MovieListAdapter).updateItems(it)
@@ -118,6 +123,7 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.ScrollEndListe
     }
 
 
+    // request next page when scroll has reached end of list
     override fun hasReachedEndOfList() {
         moviesVM.requestNextPage(getFilterType())
     }
@@ -137,19 +143,23 @@ class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.ScrollEndListe
         }
     }
 
+    // clear adapter when preference is changed
     override fun clearAdapter() {
         (movies.adapter as MovieListAdapter).updateItems(arrayListOf())
     }
 
+    // notify ui for loading items
     override fun onLoadStarted(freshLoad: Boolean) {
+
         failed_view.visibility = View.GONE
         empty_view.visibility = View.GONE
-        loading_view_indicator.visibility = if (freshLoad) View.GONE else View.VISIBLE
-        loading_items.visibility = if (freshLoad) View.VISIBLE else View.GONE
+        loading_view_indicator.visibility = if (freshLoad) View.GONE else View.VISIBLE // center indicator should only be shown when there is no item on the lise
+        loading_items.visibility = if (freshLoad) View.VISIBLE else View.GONE // bottom loader indicator shows only when there are items on the list.
     }
 
+    // show movie Details when movie is selected
     override fun movieSelected(view: View, movie: MotionMovie) {
-        showMovieDetails(view,movie)
+        showMovieDetails(view, movie)
     }
 
     override fun attachBaseContext(newBase: Context) {

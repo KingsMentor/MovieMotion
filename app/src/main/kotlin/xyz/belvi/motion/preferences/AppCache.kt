@@ -26,7 +26,11 @@ class AppCache : SecurePref(MotionApp.instance?.applicationContext, AppCache::cl
      */
 
     var updateFilterType: MovieFilter
-        get() = MovieFilter.valueOf(getString(FILTER_TYPE, MovieFilter.POPULAR.name))
+        get() = try {
+            MovieFilter.valueOf(getString(FILTER_TYPE, MovieFilter.POPULAR.name))
+        } catch (e: Exception) {
+            MovieFilter.POPULAR
+        }
         set(movieSort) = putString(FILTER_TYPE, movieSort.name)
 
 
