@@ -8,7 +8,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import xyz.belvi.motion.BuildConfig
 
 /**
- * Created by zone2 on 6/23/18.
+ * Created by Nosa Belvi on 6/23/18.
+ * @ApiClient is a singleton class implementation for performing retrofit request
+ * @apiClient for making request from any class
+ * @provideHttpClient is base httpclient for request
  */
 
 
@@ -23,8 +26,8 @@ class ApiClient {
                 return retrofit?.let { it } ?: kotlin.run {
                     Retrofit.Builder()
                             .baseUrl(API_BASE_URL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create()) // for serialization. Great resource for json parsing
+                            .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // for rx. Enable the use of Observable instead of {@link Call}
                             .client(provideHttpClient())
                             .build()
                 }
@@ -33,6 +36,7 @@ class ApiClient {
 
         private fun provideHttpClient(): OkHttpClient {
             val builder = OkHttpClient.Builder()
+            // logging details should only be shown on debug mode
             if (BuildConfig.DEBUG) {
                 val interceptor = HttpLoggingInterceptor()
                 interceptor.level = HttpLoggingInterceptor.Level.BODY

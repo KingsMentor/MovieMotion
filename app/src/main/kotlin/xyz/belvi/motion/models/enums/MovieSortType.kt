@@ -7,6 +7,10 @@ import xyz.belvi.motion.R
  * Created by Nosa Belvi on 6/23/18.
  *
  * @MovieFilter enumerates filter options for viewing movies
+ * @friendlyName seen by user
+ * @path for api request
+ * @id  for referencing menu item
+ *
  */
 enum class MovieFilter(val friendlyName: String, val path: String, @IdRes val id: Int) {
     POPULAR("Popular", "popular", R.id.action_filter_popular),

@@ -32,6 +32,15 @@ import xyz.belvi.motion.preferences.setFilterType
 import xyz.belvi.motion.search.SearchActivity
 import xyz.belvi.motion.utils.showMovieDetails
 
+/**
+ * Created by Nosa Belvi on 6/23/18.
+ *
+ * @SearchActivity houses searh implemenration of the app.
+ * ViewModel - @SearchVM
+ * Presenter - SearchResultPresenter - an extension of @MovieDetailsPresenter
+ *
+ */
+
 class MainActivity : AppCompatActivity(), EnhanceGridRecyclerView.ScrollEndListener, MoviesFetchPresenter {
 
 
