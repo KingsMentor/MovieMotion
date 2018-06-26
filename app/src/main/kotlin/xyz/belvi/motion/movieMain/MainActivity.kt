@@ -3,7 +3,6 @@ package xyz.belvi.motion.movieMain
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -48,6 +47,8 @@ class MainActivity : MovieActivity(), EnhanceGridRecyclerView.ScrollEndListener,
     private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
     private lateinit var moviesVM: MoviesVM
 
+    private var prefChanged = false
+
     // set up side nav and checked user last selected preference in menu
     private fun initSideNav() {
         setSupportActionBar(toolbar)
@@ -57,6 +58,13 @@ class MainActivity : MovieActivity(), EnhanceGridRecyclerView.ScrollEndListener,
         //
         actionBarDrawerToggle = object : ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.app_name, R.string.app_name) {
 
+            override fun onDrawerClosed(drawerView: View) {
+                super.onDrawerClosed(drawerView)
+                if (prefChanged) {
+                    prefChanged = false
+                    moviesVM.switchFilter(getFilterType())
+                }
+            }
         }
 
 
@@ -66,7 +74,7 @@ class MainActivity : MovieActivity(), EnhanceGridRecyclerView.ScrollEndListener,
             if (movieFilter != getFilterType()) {
                 item.isChecked = true
                 setFilterType(movieFilter)
-                moviesVM.switchFilter(movieFilter)
+                prefChanged = true
                 toolbar_title_view.text = String.format(getString(R.string.title_txt), movieFilter.friendlyName)
             }
             drawer_layout.closeDrawer(Gravity.END)

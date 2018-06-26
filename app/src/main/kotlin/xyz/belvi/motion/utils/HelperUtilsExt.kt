@@ -2,19 +2,12 @@ package xyz.belvi.motion.utils
 
 import android.arch.lifecycle.ViewModel
 import android.content.Context
-import android.content.Intent
-import android.os.Build
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.util.Pair
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.View
 import xyz.belvi.motion.BuildConfig
 import xyz.belvi.motion.R
 import xyz.belvi.motion.app.MotionApp
 import xyz.belvi.motion.data.realmObject.*
 import xyz.belvi.motion.models.enums.MovieFilter
-import xyz.belvi.motion.movieDetails.MovieDetailedActivity
 import xyz.belvi.motion.preferences.AppCache
 
 
@@ -77,5 +70,5 @@ fun Context.motionError(tag: String, message: String?) {
 fun Context.calculateNoOfColumns(): Int {
     val displayMetrics = this.resources.displayMetrics
     val dpWidth = displayMetrics.widthPixels / displayMetrics.density
-    return (dpWidth / 180).toInt()
+    return (dpWidth / 200).toInt()
 }

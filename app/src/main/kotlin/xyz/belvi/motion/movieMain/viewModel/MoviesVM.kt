@@ -3,10 +3,10 @@ package xyz.belvi.motion.movieMain.viewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.google.gson.reflect.TypeToken
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import io.realm.Realm
 import io.realm.RealmModel
 import xyz.belvi.motion.data.client.*
 import xyz.belvi.motion.data.realmObject.FavMovie
@@ -15,10 +15,8 @@ import xyz.belvi.motion.data.realmObject.PopularMovie
 import xyz.belvi.motion.data.realmObject.TopRatedMovie
 import xyz.belvi.motion.movieMain.presenter.MoviesFetchPresenter
 import xyz.belvi.motion.models.enums.MovieFilter
-import xyz.belvi.motion.models.retroResponse.MovieResponse
 import xyz.belvi.motion.network.call.ApiInterface
 import xyz.belvi.motion.network.client.ApiClient.Companion.apiClient
-import com.google.gson.GsonBuilder
 import xyz.belvi.motion.utils.*
 
 
@@ -28,19 +26,20 @@ import xyz.belvi.motion.utils.*
  * @presenter binds MainActivity with MoviesVM
  * @rxDisposal handles dispose of subscription to avoid memory leaks
  */
-class MoviesVM : ViewModel() {
+open class MoviesVM() : ViewModel() {
 
     private var liveMovies: MutableLiveData<MutableList<MotionMovie>> = MutableLiveData()
-    private var presenter: MoviesFetchPresenter? = null
-    val rxDisposal = CompositeDisposable()
+    private lateinit var presenter: MoviesFetchPresenter
+    private lateinit var filter: MovieFilter
+    private val rxDisposal = CompositeDisposable()
 
 
     fun bind(presenter: MoviesFetchPresenter, filter: MovieFilter): LiveData<MutableList<MotionMovie>> {
         // reset page count for new bind so data will start loadinf afresh
         resetPageCounter()
         this.presenter = presenter
-        loadMoviesByFilter(filter)
-        return liveMovies;
+        this.filter = filter
+        return liveMovies
     }
 
     // handles request for a next page
@@ -48,50 +47,54 @@ class MoviesVM : ViewModel() {
         filter.updatePageCounter() // increment page counter
         if (filter != MovieFilter.FAVORITE) {
             // new page is  not requested for favorite item. Favorite items is fetched from db
-            this.presenter?.onLoadStarted(false)
+            this.presenter.onLoadStarted(false)
             if (filter == MovieFilter.POPULAR) {
-                fetchMoviesFromApi<PopularMovie>(filter)
+                fetchMoviesFromApi<PopularMovie>()
             } else if (filter == MovieFilter.TOP_RATED) {
-                fetchMoviesFromApi<TopRatedMovie>(filter)
+                fetchMoviesFromApi<TopRatedMovie>()
             }
         }
     }
 
     // update items  whenever preference is changed
     fun switchFilter(movieFilter: MovieFilter) {
-        this.presenter?.clearAdapter()
-        loadMoviesByFilter(movieFilter)
+        this.presenter.clearAdapter()
+        this.filter = movieFilter
+        loadMovies()
     }
 
-    private fun loadMoviesByFilter(filter: MovieFilter) {
+    private fun loadMovies() {
         when (filter) {
             MovieFilter.POPULAR -> {
-                this.presenter?.onLoadStarted(isRealmListEmpty<PopularMovie>())
+                this.presenter.onLoadStarted(isRealmListEmpty<PopularMovie>())
                 switchRealmObserver<PopularMovie>()
-                fetchMoviesFromApi<PopularMovie>(filter)
+                fetchMoviesFromApi<PopularMovie>()
             }
             MovieFilter.TOP_RATED -> {
-                this.presenter?.onLoadStarted(isRealmListEmpty<TopRatedMovie>())
+                this.presenter.onLoadStarted(isRealmListEmpty<TopRatedMovie>())
                 switchRealmObserver<TopRatedMovie>()
-                fetchMoviesFromApi<TopRatedMovie>(filter)
+                fetchMoviesFromApi<TopRatedMovie>()
             }
             else -> {
-                this.presenter?.onLoadStarted(isRealmListEmpty<FavMovie>())
+                this.presenter.onLoadStarted(isRealmListEmpty<FavMovie>())
                 switchRealmObserver<FavMovie>()
-                this.presenter?.onLoadCompleted(isRealmListEmpty<FavMovie>())
+                this.presenter.onLoadCompleted(isRealmListEmpty<FavMovie>())
 
             }
         }
     }
+
 
     // fetch from realm and observe. Multiple obersavation is not allowed because the user can only see one list at a time
     private inline fun <reified T : RealmModel> switchRealmObserver() {
         rxDisposal.clear()
         rxDisposal.add(
                 fetch<T>()?.asFlowable()?.subscribe {
-                    (it as? MutableList<MotionMovie>)?.let {
+                    it?.let {
                         if (it.isNotEmpty()) {
-                            liveMovies.value = it
+                            val items = Realm.getDefaultInstance().copyFromRealm(it as MutableList<T>)
+                            liveMovies.postValue(items as MutableList<MotionMovie>)
+
                         }
                     }
                 }!!
@@ -99,14 +102,14 @@ class MoviesVM : ViewModel() {
     }
 
     // this function is generic so it can handle as many instance of realModel we have
-    private inline fun <reified D : RealmModel> fetchMoviesFromApi(filter: MovieFilter) {
+    private inline fun <reified D : RealmModel> fetchMoviesFromApi() {
         // only make this api call when apiKey is available
         apiKey()?.let { apiKey ->
             apiClient.create(ApiInterface::class.java).fetchMovies(filter.path, apiKey, filter.currentPage())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnError {
-                        this.presenter?.onLoadFailure(isRealmListEmpty<D>())
+                        this.presenter.onLoadFailure(isRealmListEmpty<D>())
                     }
                     .onErrorResumeNext(io.reactivex.Observable.empty())
                     .subscribe {
@@ -119,12 +122,12 @@ class MoviesVM : ViewModel() {
                                 update(it.results.toTopRatedMovies())
                             else
                                 update(it.results.toPopularMovies())
-                            this.presenter?.onLoadCompleted(it.results.size == 0)
+                            this.presenter.onLoadCompleted(it.results.size == 0)
                         }
                     }
         } ?: kotlin.run {
             // notify failure
-            this.presenter?.onLoadFailure(isRealmListEmpty<D>())
+            this.presenter.onLoadFailure(isRealmListEmpty<D>())
         }
     }
 

@@ -41,28 +41,32 @@ dependencies {
      * for unit testing
      */
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.robolectric:robolectric:3.8"
     testImplementation 'org.jetbrains.kotlin:kotlin-stdlib:1.2.41'
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit:1.2.10'
     testImplementation "com.nhaarman:mockito-kotlin:1.1.0"
     testImplementation 'org.amshove.kluent:kluent:1.14'
-    testImplementation "org.robolectric:robolectric:3.8"
     testImplementation "org.mockito:mockito-core:2.+"
     testImplementation 'org.jetbrains.kotlin:kotlin-stdlib:1.2.41'
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit:1.2.10'
     testImplementation "com.nhaarman:mockito-kotlin:1.1.0"
     testImplementation 'org.amshove.kluent:kluent:1.14'
-    testImplementation "org.robolectric:multidex:3.4.2"
 
     /**
      * for Android testing
      */
-    androidTestCompile 'com.android.support.test:runner:1.0.2'
-    androidTestCompile 'com.android.support.test:rules:1.0.2'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.2'
-    androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.2'
-    androidTestCompile 'com.android.support:support-annotations:27.1.1'
-    androidTestCompile 'org.mockito:mockito-android:2.7.22'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-intents:3.0.2'
+    androidTestImplementation 'com.android.support:support-annotations:27.1.1'
+    androidTestImplementation 'org.mockito:mockito-android:2.7.22'
+    androidTestImplementation "android.arch.core:core-testing:$lifeCycleVersion"
+
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.0') {
+        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+    }
 
     /**
      * kotlin
