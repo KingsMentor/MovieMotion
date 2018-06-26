@@ -124,6 +124,9 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
             movie()?.let {
                 // add to favorite if checked or remove from favorite if not checked.
                 movieDetailsVM.addToFavoriteList(FavMovie(it.id, it), item.isChecked)
+                if (item.isChecked) {
+                    NotificationUtils.notify(movie()?.original_title + " added to favorite", this)
+                }
             }
 
         }
@@ -145,9 +148,6 @@ class MovieDetailedActivity : AppCompatActivity(), MovieDetailsPresenter {
     override fun markFavorite(isFav: Boolean): MovieDetailsPresenter {
         // update favItem (menuItem) UI
         favItem?.setIcon(if (isFav) R.drawable.ic_star_white_selected else R.drawable.ic_star_white_24dp)
-        if (isFav) {
-            NotificationUtils.notify(movie()?.original_title + " added to favorite", this)
-        }
         return this
     }
 
