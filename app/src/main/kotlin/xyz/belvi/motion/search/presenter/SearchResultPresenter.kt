@@ -5,7 +5,11 @@ import xyz.belvi.motion.data.realmObject.MotionMovie
 import xyz.belvi.motion.movieMain.presenter.MoviesFetchPresenter
 
 /**
- * Created by zone2 on 6/25/18.
+ * Created by Nosa Belvi on 6/25/18.
+ * @SearchResultPresenter abstracts implementation for @SearchActivity
+ * extends @MoviesFetchPresenter since both perform similar core operation
+ * @override @MoviesFetchPresenter methods to prevent class that extends @SearchResultPresenter from doing same.
+ * see @SearchActivity for examples.
  */
 interface SearchResultPresenter : MoviesFetchPresenter {
 

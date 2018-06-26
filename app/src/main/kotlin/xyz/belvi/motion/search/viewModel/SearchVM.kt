@@ -9,20 +9,28 @@ import xyz.belvi.motion.network.call.ApiInterface
 import xyz.belvi.motion.network.client.ApiClient
 import xyz.belvi.motion.search.presenter.SearchResultPresenter
 import xyz.belvi.motion.utils.apiKey
+import xyz.belvi.motion.utils.toPopularMovies
 import xyz.belvi.motion.utils.toTopRatedMovies
 
 /**
- * Created by zone2 on 6/25/18.
+ * Created by Nosa Belvi on 6/25/18.
+ *
+ * ViewModel for SearchActiviy
+ * extends @ViewModel
+ * @rxDispose - disposeBag for rxSubscriptions
+ *
  */
 class SearchVM : ViewModel() {
 
     private lateinit var mPresenter: SearchResultPresenter
     private val rxDispose: CompositeDisposable = CompositeDisposable()
+
     fun bind(presenter: SearchResultPresenter) {
         this.mPresenter = presenter
     }
 
 
+    // perform a search query
     fun search(query: String) {
         mPresenter.onLoadStarted(true)
         runQuery(query)
@@ -30,6 +38,7 @@ class SearchVM : ViewModel() {
 
     private fun runQuery(query: String) {
 
+        // only call this call if apiKey was successfully retrieved
         apiKey()?.let {
             rxDispose.clear()
             rxDispose.add(
@@ -42,13 +51,22 @@ class SearchVM : ViewModel() {
                             }
                             .onErrorResumeNext(io.reactivex.Observable.empty())
                             .subscribe {
-                                mPresenter.onSearchResult(it.results.toTopRatedMovies() as MutableList<MotionMovie>)
+
+                                /** first convert to any MotionMove type. I choose to use @it.results.toTopRatedMovies(),
+                                 * it can also be @it.results.toPopularMovies(). Both are of type @MotionMovie and woud work
+                                 */
+
+                                mPresenter.onSearchResult(it.results.toPopularMovies() as MutableList<MotionMovie>)
                             }
             )
+        } ?: kotlin.run {
+            // notify error on failed scnerio
+            mPresenter.onLoadFailure(true)
         }
     }
 
 
+    // clear disposebag
     override fun onCleared() {
         super.onCleared()
         rxDispose.clear()

@@ -10,9 +10,16 @@ import java.io.UnsupportedEncodingException
 import java.security.GeneralSecurityException
 
 /**
- * Created by zone2 on 12/24/17.
+ *
+ * Created by Nosa Belvi on 12/24/17.
+ * @SecurePref extends @SecurePreferences (a class from secure-preference library)
+ * it generates a secretKey with help of util class @SecureUtils
+ * base implemtation is - keys are hashed and values are encrypted
+ * it also abstract basic sharePreference storage functions. This result to lesser code as seen in @AppCache Implementation
+ *
  */
-open class SecurePref(context: Context?, className: String) : SecurePreferences(context, secretKey(SecureUtils().getDbKey(context), SecureUtils().getHashKey(context)), context?.packageName + "." + className + ".xml") {
+
+open class SecurePref(context: Context?, className: String) : SecurePreferences(context, secretKey(SecureUtils().getHashKey(context), SecureUtils().getDbKey(context)), context?.packageName + "." + className + ".xml") {
 
     private val mContext: Context? = context
 

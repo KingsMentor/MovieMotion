@@ -81,6 +81,9 @@ class TrailersVM : ViewModel() {
                         mPresenter?.onLoadCompleted(it.results.size == 0)
                     }
 
+        } ?: kotlin.run {
+            // notify error on failed scnerio
+            mPresenter?.onTrailerRetrieveFailed(isRealmListEmpty<Trailer>())
         }
     }
 

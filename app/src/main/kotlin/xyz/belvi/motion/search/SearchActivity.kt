@@ -26,6 +26,15 @@ import xyz.belvi.motion.search.presenter.SearchResultPresenter
 import xyz.belvi.motion.search.viewModel.SearchVM
 import xyz.belvi.motion.utils.showMovieDetails
 
+/**
+ * Created by Nosa Belvi on 6/23/18.
+ *
+ * @SearchActivity houses searh implemenration of the app.
+ * ViewModel - @SearchVM
+ * Presenter - SearchResultPresenter - an extension of @MovieDetailsPresenter
+ *
+ */
+
 class SearchActivity : AppCompatActivity(), SearchResultPresenter {
 
     private lateinit var searchVM: SearchVM
@@ -37,10 +46,11 @@ class SearchActivity : AppCompatActivity(), SearchResultPresenter {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
 
-
+        // initialise viewModel and bind with this activity
         searchVM = ViewModelProviders.of(this).get(SearchVM::class.java)
         searchVM.bind(this)
 
+        // hous keeping for recyclerview
         search_recycler.apply {
             layoutManager = GridLayoutManager(this@SearchActivity, 2)
             setHasFixedSize(false)
@@ -48,6 +58,7 @@ class SearchActivity : AppCompatActivity(), SearchResultPresenter {
         }
 
 
+        // merge searh and retry button action lick. They both perform same operation
         Observable.merge(RxView.clicks(search), RxView.clicks(retry))
                 .subscribe { searchVM.search(search_field.text.toString()) }
 
@@ -67,6 +78,7 @@ class SearchActivity : AppCompatActivity(), SearchResultPresenter {
         empty_view.visibility = View.GONE
     }
 
+
     override fun onLoadFailure(emptyDataSet: Boolean) {
         super.onLoadFailure(emptyDataSet)
         failed_view.visibility = View.VISIBLE
@@ -76,6 +88,7 @@ class SearchActivity : AppCompatActivity(), SearchResultPresenter {
         empty_view.visibility = View.GONE
     }
 
+    // updates recyclerview with search result
     override fun onSearchResult(result: MutableList<MotionMovie>) {
         super.onSearchResult(result)
         progress_indicator.visibility = View.GONE
@@ -85,6 +98,7 @@ class SearchActivity : AppCompatActivity(), SearchResultPresenter {
 
     }
 
+    // show movie details page when a movie is selected
     override fun movieSelected(view: View, movie: MotionMovie) {
         super.movieSelected(view, movie)
         showMovieDetails(view, movie)

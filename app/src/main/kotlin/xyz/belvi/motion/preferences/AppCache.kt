@@ -5,7 +5,13 @@ import xyz.belvi.motion.app.MotionApp
 import xyz.belvi.motion.models.enums.MovieFilter
 
 /**
- * Created by zone2 on 1/9/18.
+ * Created by Nosa Belvi on 1/9/18.
+ *
+ * @AppCache handles all sharePreferences operation in the app.
+ * extends @SecurePref to implements encrpted shared preference.
+ * This is not the best use case but this implementation is really important for securing date in share preference
+ * see documentation on @SecurePref for more information
+ *
  */
 class AppCache : SecurePref(MotionApp.instance?.applicationContext, AppCache::class.simpleName!!) {
 
@@ -24,14 +30,26 @@ class AppCache : SecurePref(MotionApp.instance?.applicationContext, AppCache::cl
         set(movieSort) = putString(FILTER_TYPE, movieSort.name)
 
 
+    /**
+     * update last requested page on  @MovieFilter.POPULAR
+     */
+
     private var lastRequestedPopularPage: Int
         get() = getInt(PAGE_POPULAR, 1)
         set(lastRequestedPage) = putInt(PAGE_POPULAR, lastRequestedPage)
 
+
+    /**
+     * update last requested page on  @MovieFilter.TOP_RATED
+     */
     private var lastRequestedRatedPage: Int
         get() = getInt(PAGE_RATED, 1)
         set(lastRequestedPage) = putInt(PAGE_RATED, lastRequestedPage)
 
+
+    /**
+     * reset page of  @MovieFilter.TOP_RATED and @MovieFilter.POPULAR
+     */
     fun resetLastRequestedPage() {
         lastRequestedPopularPage = 1
         lastRequestedRatedPage = 1

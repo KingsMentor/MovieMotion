@@ -110,6 +110,8 @@ class MoviesVM : ViewModel() {
                             this.presenter?.onLoadCompleted(it.results.size == 0)
                         }
                     }
+        } ?: kotlin.run {
+            this.presenter?.onLoadFailure(isRealmListEmpty<D>())
         }
     }
 
