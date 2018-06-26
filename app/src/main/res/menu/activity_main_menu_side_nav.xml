@@ -4,10 +4,7 @@
     <group
         android:id="@+id/filter_option"
         android:checkableBehavior="single">
-        <item
-            android:id="@id/action_filter_favorite"
-            android:title="@string/filter_fav"
-            app:showAsAction="never" />
+
         <item
             android:id="@id/action_filter_popular"
             android:checked="true"
@@ -16,6 +13,10 @@
         <item
             android:id="@id/action_filter_top_rated"
             android:title="@string/filter_top_rated"
+            app:showAsAction="never" />
+        <item
+            android:id="@id/action_filter_favorite"
+            android:title="@string/filter_fav"
             app:showAsAction="never" />
     </group>
 </menu>
